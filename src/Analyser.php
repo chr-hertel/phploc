@@ -16,13 +16,11 @@ use function count;
 use function dirname;
 use function explode;
 use function file_get_contents;
-use function is_string;
 use function max;
 use function min;
 use function sprintf;
 use function substr_count;
 use PhpParser\Error;
-use PhpParser\Lexer;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
 use PhpParser\NodeVisitor\ParentConnectingVisitor;
@@ -36,16 +34,14 @@ use SebastianBergmann\LinesOfCode\LinesOfCode;
 final class Analyser
 {
     /**
-     * @psalm-param list<non-empty-string> $files
+     * @param list<non-empty-string> $files
      */
     public function analyse(array $files, bool $debug): Result
     {
         $errors      = [];
         $directories = [];
         $complexity  = ComplexityCollection::fromList();
-
-        /** @psalm-suppress MissingThrowsDocblock */
-        $linesOfCode = new LinesOfCode(0, 0, 0, 0);
+        $linesOfCode = null;
 
         foreach ($files as $file) {
             if ($debug) {
@@ -57,12 +53,15 @@ final class Analyser
             try {
                 $result = $this->analyseFile($file);
 
-                $complexity  = $complexity->mergeWith($result['complexity']);
-                $linesOfCode = $linesOfCode->plus($result['linesOfCode']);
+                $complexity = $complexity->mergeWith($result['complexity']);
+
+                if ($result['linesOfCode'] !== null) {
+                    $linesOfCode = $linesOfCode === null ? $result['linesOfCode'] : $linesOfCode->plus($result['linesOfCode']);
+                }
             } catch (ParserException $e) {
                 $message = $e->getMessage();
 
-                assert(is_string($message) && !empty($message));
+                assert($message !== '');
 
                 $errors[] = $message;
             }
@@ -86,10 +85,10 @@ final class Analyser
             $errors,
             count(array_unique($directories)),
             count($files),
-            $linesOfCode->linesOfCode(),
-            $linesOfCode->commentLinesOfCode(),
-            $linesOfCode->nonCommentLinesOfCode(),
-            $linesOfCode->logicalLinesOfCode(),
+            $linesOfCode?->linesOfCode() ?? 0,
+            $linesOfCode?->commentLinesOfCode() ?? 0,
+            $linesOfCode?->nonCommentLinesOfCode() ?? 0,
+            $linesOfCode?->logicalLinesOfCode() ?? 0,
             $numberOfFunctions,
             $complexityFunctions['minimum'],
             $complexityFunctions['average'],
@@ -103,23 +102,38 @@ final class Analyser
     }
 
     /**
-     * @psalm-param non-empty-string $file
-     *
-     * @psalm-return array{complexity: ComplexityCollection, linesOfCode: LinesOfCode}
+     * @param non-empty-string $file
      *
      * @throws ParserException
+     *
+     * @return array{complexity: ComplexityCollection, linesOfCode: ?LinesOfCode}
      */
     private function analyseFile(string $file): array
     {
-        $parser = $this->parser();
         $source = file_get_contents($file);
-        $lines  = substr_count($source, "\n");
 
-        if ($lines === 0 && !empty($source)) {
-            $lines = 1;
+        if ($source === false) {
+            throw new ParserException(
+                sprintf(
+                    'Cannot read %s',
+                    $file,
+                ),
+            );
         }
 
-        assert($lines >= 0);
+        if ($source === '') {
+            return [
+                'complexity'  => ComplexityCollection::fromList(),
+                'linesOfCode' => null,
+            ];
+        }
+
+        $parser = $this->parser();
+        $lines  = substr_count($source, "\n");
+
+        if ($lines === 0) {
+            $lines = 1;
+        }
 
         try {
             $nodes = $parser->parse($source);
@@ -157,14 +171,11 @@ final class Analyser
 
     private function parser(): Parser
     {
-        return (new ParserFactory)->create(
-            ParserFactory::PREFER_PHP7,
-            new Lexer,
-        );
+        return (new ParserFactory)->createForNewestSupportedVersion();
     }
 
     /**
-     * @psalm-return array{minimum: non-negative-int, maximum: non-negative-int, average: float}
+     * @return array{minimum: non-negative-int, maximum: non-negative-int, average: float}
      */
     private function cyclomaticComplexityStatistics(ComplexityCollection $items): array
     {

@@ -113,6 +113,7 @@
 
         <exec executable="${basedir}/tools/phpab">
             <arg value="--all" />
+            <arg value="--tolerant" />
             <arg value="--phar" />
             <arg value="--hash" />
             <arg value="SHA-512" />

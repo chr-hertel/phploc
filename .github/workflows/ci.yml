@@ -20,37 +20,37 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
+          php-version: 8.4
           coverage: none
 
       - name: Run PHP-CS-Fixer
         run: ./tools/php-cs-fixer fix --dry-run --show-progress=dots --using-cache=no --verbose
 
-  type-checker:
-    name: Type Checker
+  static-analysis:
+    name: Static Analysis
 
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Install PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: 8.2
+          php-version: 8.4
           coverage: none
 
       - name: Install dependencies with Composer
         run: ./tools/composer update --no-interaction --no-ansi --no-progress
 
-      - name: Run Psalm
-        run: ./tools/psalm --config=.psalm/config.xml --no-progress --shepherd --show-info=false --stats
+      - name: Run PHPStan
+        run: ./tools/phpstan analyse --no-progress --error-format=github
 
   tests:
     name: Tests
@@ -61,13 +61,12 @@ jobs:
       fail-fast: false
       matrix:
         php-version:
-          - "8.2"
-          - "8.3"
           - "8.4"
+          - "8.5"
 
     steps:
       - name: "Checkout"
-        uses: "actions/checkout@v4"
+        uses: "actions/checkout@v5"
 
       - name: "Install PHP with extensions"
         uses: "shivammathur/setup-php@v2"
@@ -82,6 +81,7 @@ jobs:
         run: "./tools/phpunit --coverage-clover=coverage.xml"
 
       - name: "Send code coverage report to Codecov.io"
-        env:
-          CODECOV_TOKEN: "${{ secrets.CODECOV_TOKEN }}"
-        run: "bash <(curl -s https://codecov.io/bash) || true"
+        uses: "codecov/codecov-action@v5"
+        with:
+          files: "coverage.xml"
+          token: "${{ secrets.CODECOV_TOKEN }}"

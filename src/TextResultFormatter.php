@@ -10,14 +10,13 @@
 namespace SebastianBergmann\PHPLOC;
 
 use const PHP_EOL;
-use function assert;
 use function number_format;
 use function sprintf;
 
 final readonly class TextResultFormatter
 {
     /**
-     * @psalm-return non-empty-string
+     * @return non-empty-string
      */
     public function format(Result $result): string
     {
@@ -91,8 +90,6 @@ EOT,
                 );
             }
         }
-
-        assert($buffer !== '');
 
         return $buffer;
     }
