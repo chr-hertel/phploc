@@ -1,5 +1,3 @@
-/build/phar
-/build/*.phar*
 /.idea
 /composer.lock
 /vendor

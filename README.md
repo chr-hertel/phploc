@@ -6,28 +6,18 @@
 
 ## Installation
 
-This tool is distributed as a [PHP Archive (PHAR)](https://php.net/phar):
+This tool is installed using [Composer](https://getcomposer.org/):
 
 ```bash
-$ wget https://phar.phpunit.de/phploc.phar
+$ composer require --dev phploc/phploc
 
-$ php phploc.phar --version
+$ ./vendor/bin/phploc --version
 ```
-
-Using [Phive](https://phar.io/) is the recommended way for managing the tool dependencies of your project:
-
-```bash
-$ phive install phploc
-
-$ ./tools/phploc --version
-```
-
-**[It is not recommended to use Composer to download and install this tool.](https://docs.phpunit.de/en/main/installation.html#phar-or-composer)**
 
 ## Usage Example
 
 ```
-$ php phploc.phar src
+$ ./vendor/bin/phploc src
 phploc 8.0-dev by Sebastian Bergmann.
 
 Directories:                                        104

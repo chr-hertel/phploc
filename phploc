@@ -1,5 +1,5 @@
 #!/usr/bin/env php
-<?php
+<?php declare(strict_types=1);
 /*
  * This file is part of PHPLOC.
  *
@@ -8,23 +8,115 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use SebastianBergmann\FileIterator\Facade;
+use SebastianBergmann\PHPLOC\Analyser;
+use SebastianBergmann\PHPLOC\TextResultFormatter;
+use SebastianBergmann\Version;
+use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\SingleCommandApplication;
 
-$loaded = false;
+if (!\class_exists(Analyser::class)) {
+    $loaded = false;
 
-foreach (array(__DIR__ . '/../../autoload.php', __DIR__ . '/vendor/autoload.php') as $file) {
-    if (file_exists($file)) {
-        require $file;
-        $loaded = true;
-        break;
+    foreach ([__DIR__ . '/../../autoload.php', __DIR__ . '/vendor/autoload.php'] as $file) {
+        if (\file_exists($file)) {
+            require $file;
+
+            $loaded = true;
+
+            break;
+        }
+    }
+
+    if (!$loaded) {
+        \fwrite(
+            STDERR,
+            'You need to set up the project dependencies using the following commands:' . PHP_EOL .
+            'wget https://getcomposer.org/composer.phar' . PHP_EOL .
+            'php composer.phar install' . PHP_EOL,
+        );
+
+        exit(1);
     }
 }
 
-if (!$loaded) {
-    die(
-        'You need to set up the project dependencies using the following commands:' . PHP_EOL .
-        'wget http://getcomposer.org/composer.phar' . PHP_EOL .
-        'php composer.phar install' . PHP_EOL
-    );
-}
+$version = (new Version('8.0', __DIR__))->asString();
 
-exit((new \SebastianBergmann\PHPLOC\Application)->run($_SERVER['argv']));
+/**
+ * The values that Symfony Console hands back are `mixed`; this narrows them to
+ * what SebastianBergmann\FileIterator\Facade documents as its input.
+ *
+ * @return list<non-empty-string>
+ */
+$listOfStrings = static function (mixed $value): array
+{
+    $result = [];
+
+    foreach ((array) $value as $item) {
+        \assert(\is_string($item) && $item !== '');
+
+        $result[] = $item;
+    }
+
+    return $result;
+};
+
+(new SingleCommandApplication)
+    ->setName('phploc')
+    ->setVersion($version)
+    ->addArgument(
+        'directory',
+        InputArgument::REQUIRED | InputArgument::IS_ARRAY,
+        'Directory to analyse',
+    )
+    ->addOption(
+        'suffix',
+        null,
+        InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
+        'Include files with names ending in <suffix> in the analysis (.php is always included)',
+    )
+    ->addOption(
+        'exclude',
+        null,
+        InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
+        'Exclude files with <path> in their path from the analysis',
+    )
+    ->addOption(
+        'debug',
+        null,
+        InputOption::VALUE_NONE,
+        'Print debugging information',
+    )
+    ->setCode(
+        static function (InputInterface $input, OutputInterface $output) use ($version, $listOfStrings): int
+        {
+            $output->writeln(\sprintf('phploc %s by Sebastian Bergmann.', $version));
+            $output->writeln('');
+
+            $files = (new Facade)->getFilesAsArray(
+                $listOfStrings($input->getArgument('directory')),
+                ['.php', ...$listOfStrings($input->getOption('suffix'))],
+                '',
+                $listOfStrings($input->getOption('exclude')),
+            );
+
+            if ($files === []) {
+                $output->writeln('No files found to scan');
+
+                return Command::FAILURE;
+            }
+
+            $output->write(
+                (new TextResultFormatter)->format(
+                    (new Analyser)->analyse($files, (bool) $input->getOption('debug')),
+                ),
+            );
+
+            return Command::SUCCESS;
+        },
+    )
+    ->run();

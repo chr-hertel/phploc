@@ -2,10 +2,8 @@
 phploc
 --FILE--
 <?php declare(strict_types=1);
-require __DIR__ . '/../../vendor/autoload.php';
+require __DIR__ . '/_phploc.php';
 
-(new SebastianBergmann\PHPLOC\Application)->run($_SERVER['argv']);
+phploc();
 --EXPECTF--
-phploc %s by Sebastian Bergmann.
-
-No directory specified
+%ANot enough arguments (missing: "directory").%A
