@@ -9,6 +9,7 @@
  */
 namespace SebastianBergmann\PHPLOC;
 
+use const PHP_EOL;
 use function assert;
 use function number_format;
 use function sprintf;
@@ -78,6 +79,17 @@ EOT,
                 number_format($result->averageCyclomaticComplexityForFunction()),
                 number_format($result->highestCyclomaticComplexityForFunction()),
             );
+        }
+
+        if ($result->hasErrors()) {
+            $buffer .= PHP_EOL . 'Errors:' . PHP_EOL;
+
+            foreach ($result->errors() as $error) {
+                $buffer .= sprintf(
+                    '  %s' . PHP_EOL,
+                    $error,
+                );
+            }
         }
 
         assert($buffer !== '');

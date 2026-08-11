@@ -28,4 +28,54 @@ final class TextResultFormatterTest extends TestCase
             ),
         );
     }
+
+    public function testFormatsErrors(): void
+    {
+        $this->assertStringEqualsFile(
+            __DIR__ . '/../_expectations/result-with-errors.txt',
+            (new TextResultFormatter)->format(
+                new Result(
+                    [
+                        'Cannot parse /path/to/First.php: Syntax error',
+                        'Cannot parse /path/to/Second.php: Syntax error',
+                    ],
+                    1,
+                    2,
+                    10,
+                    4,
+                    6,
+                    3,
+                    7,
+                    8,
+                    9,
+                    10,
+                    11,
+                    12,
+                    13,
+                    14,
+                    15,
+                ),
+            ),
+        );
+    }
+
+    public function testDoesNotFormatComplexityOfFunctionsWhenThereAreNone(): void
+    {
+        $this->assertStringEqualsFile(
+            __DIR__ . '/../_expectations/result-without-functions.txt',
+            (new TextResultFormatter)->format(
+                new Result([], 1, 2, 10, 4, 6, 3, 0, 0, 0.0, 0, 11, 12, 13, 14.0, 15),
+            ),
+        );
+    }
+
+    public function testDoesNotFormatComplexityOfClassesOrFunctionsWhenThereAreNone(): void
+    {
+        $this->assertStringEqualsFile(
+            __DIR__ . '/../_expectations/result-without-classes-or-functions.txt',
+            (new TextResultFormatter)->format(
+                new Result([], 1, 2, 10, 4, 6, 3, 0, 0, 0.0, 0, 0, 0, 0, 0.0, 0),
+            ),
+        );
+    }
 }

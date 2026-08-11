@@ -1,0 +1,7 @@
+Directories:                                          1
+Files:                                                2
+
+Lines of Code (LOC):                                 10
+Comment Lines of Code (CLOC):                         4 (40.00%)
+Non-Comment Lines of Code (NCLOC):                    6 (60.00%)
+Logical Lines of Code (LLOC):                         3 (30.00%)
