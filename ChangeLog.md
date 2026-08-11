@@ -8,6 +8,7 @@ Everything up to and including [7.0.2](https://github.com/sebastianbergmann/phpl
 
 ### Added
 
+* The `--json` CLI option prints the result as JSON instead of as text; it suppresses the version banner and cannot be combined with `--debug`
 * Files that cannot be read are now reported like files that cannot be parsed instead of aborting the run
 
 ### Changed

@@ -32,6 +32,12 @@ $ composer require --dev hertel/phploc
 $ ./vendor/bin/phploc --version
 ```
 
+Pass `--json` to get the result as JSON instead of as the text report, for example to feed it into another tool:
+
+```bash
+$ ./vendor/bin/phploc --json src
+```
+
 ## Usage Example
 
 ```
