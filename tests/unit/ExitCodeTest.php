@@ -82,15 +82,15 @@ final class ExitCodeTest extends TestCase
      */
     private function runPhploc(array $arguments, ?string &$output = null): int
     {
-        $command = \escapeshellarg(\PHP_BINARY).' '.\escapeshellarg(__DIR__.'/../../phploc');
+        $command = escapeshellarg(\PHP_BINARY).' '.escapeshellarg(__DIR__.'/../../phploc');
 
         foreach ($arguments as $argument) {
-            $command .= ' '.\escapeshellarg($argument);
+            $command .= ' '.escapeshellarg($argument);
         }
 
-        \exec($command.' 2>&1', $lines, $exitCode);
+        exec($command.' 2>&1', $lines, $exitCode);
 
-        $output = \implode(\PHP_EOL, $lines);
+        $output = implode(\PHP_EOL, $lines);
 
         return $exitCode;
     }

@@ -19,8 +19,8 @@ COMPOSER_ROOT_VERSION=8.0-dev composer update  # install deps (no composer.lock 
 ./vendor/bin/phpunit --testsuite end-to-end    # .phpt CLI tests only
 ./vendor/bin/phpunit --filter testAnalysesFiles
 ./vendor/bin/phpunit tests/unit/AnalyserTest.php
-./vendor/bin/php-cs-fixer fix                  # apply coding standard
-./vendor/bin/php-cs-fixer fix --dry-run --diff # check only (what CI runs)
+/usr/bin/php8.4 ./vendor/bin/php-cs-fixer fix                  # apply coding standard -- PHP 8.4, see below
+/usr/bin/php8.4 ./vendor/bin/php-cs-fixer fix --dry-run --diff # check only (what CI runs)
 ./vendor/bin/phpstan analyse                   # static analysis (level max over src + phploc)
 XDEBUG_MODE=coverage ./vendor/bin/phpunit --coverage-text
 ```
@@ -34,6 +34,8 @@ CI (`.github/workflows/ci.yml`) runs php-cs-fixer (dry-run), PHPStan, and PHPUni
 ### Local toolchain
 
 Everything requires PHP >= 8.4.1, which matches the project's own requirement. Both interpreters on this machine work — the default `php` (8.5) and `/usr/bin/php8.4`. Coverage needs the `XDEBUG_MODE=coverage` prefix and the default `php`, because Xdebug is only installed for 8.5.
+
+**php-cs-fixer must be run with `/usr/bin/php8.4`.** The `@Symfony:risky` ruleset configures `native_function_invocation` with the `@compiler_optimized` set, and which functions that covers is derived from the PHP version the fixer itself runs on: PHP 8.5 wants `\escapeshellarg(...)`/`\exec(...)`/`\implode(...)`, PHP 8.4 wants them unprefixed. The two cannot both be satisfied, and CI runs the fixer on 8.4, so 8.4 decides. The fixer prints a warning about this when it is run on a newer PHP than the project's minimum — that warning is the symptom, and a green local run on 8.5 that fails CI is the consequence. Delete `.php-cs-fixer.cache` when switching interpreters, or the cache hides the difference.
 
 ## Architecture
 
