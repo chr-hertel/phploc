@@ -67,7 +67,7 @@ final class ApplicationTest extends TestCase
     }
 
     /**
-     * @psalm-param list<non-empty-string> $arguments
+     * @param list<non-empty-string> $arguments
      */
     private function runApplication(array $arguments, ?string &$output = null): int
     {

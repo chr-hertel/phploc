@@ -12,17 +12,17 @@ namespace SebastianBergmann\PHPLOC;
 final class Arguments
 {
     /**
-     * @psalm-var list<non-empty-string>
+     * @var list<non-empty-string>
      */
     private array $directories;
 
     /**
-     * @psalm-var list<non-empty-string>
+     * @var list<non-empty-string>
      */
     private array $suffixes;
 
     /**
-     * @psalm-var list<non-empty-string>
+     * @var list<non-empty-string>
      */
     private array $exclude;
     private bool $debug;
@@ -30,9 +30,9 @@ final class Arguments
     private bool $version;
 
     /**
-     * @psalm-param list<non-empty-string> $directories
-     * @psalm-param list<non-empty-string> $suffixes
-     * @psalm-param list<non-empty-string> $exclude
+     * @param list<non-empty-string> $directories
+     * @param list<non-empty-string> $suffixes
+     * @param list<non-empty-string> $exclude
      */
     public function __construct(array $directories, array $suffixes, array $exclude, bool $debug, bool $help, bool $version)
     {
@@ -45,7 +45,7 @@ final class Arguments
     }
 
     /**
-     * @psalm-return list<non-empty-string>
+     * @return list<non-empty-string>
      */
     public function directories(): array
     {
@@ -53,7 +53,7 @@ final class Arguments
     }
 
     /**
-     * @psalm-return list<non-empty-string>
+     * @return list<non-empty-string>
      */
     public function suffixes(): array
     {
@@ -61,7 +61,7 @@ final class Arguments
     }
 
     /**
-     * @psalm-return list<non-empty-string>
+     * @return list<non-empty-string>
      */
     public function exclude(): array
     {

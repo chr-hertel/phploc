@@ -15,20 +15,20 @@
     },
     "config": {
         "platform": {
-            "php": "8.2.0"
+            "php": "8.4.0"
         },
         "optimize-autoloader": true,
         "sort-packages": true
     },
     "prefer-stable": true,
     "require": {
-        "php": ">=8.2",
-        "nikic/php-parser": "^4.17",
-        "phpunit/php-file-iterator": "^4.1",
-        "sebastian/cli-parser": "^2.0",
-        "sebastian/complexity": "^3.1",
-        "sebastian/lines-of-code": "^2.0",
-        "sebastian/version": "^4.0"
+        "php": ">=8.4",
+        "nikic/php-parser": "^5.8",
+        "phpunit/php-file-iterator": "^7.0",
+        "sebastian/cli-parser": "^5.0",
+        "sebastian/complexity": "^6.0",
+        "sebastian/lines-of-code": "^5.0",
+        "sebastian/version": "^7.0"
     },
     "autoload": {
         "classmap": [

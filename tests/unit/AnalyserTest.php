@@ -119,6 +119,23 @@ final class AnalyserTest extends TestCase
         $this->assertSame(1, $result->nonCommentLinesOfCode());
     }
 
+    public function testAnalysesEmptyFile(): void
+    {
+        $result = (new Analyser)->analyse(
+            [
+                __DIR__ . '/../_fixture-empty/empty.php',
+            ],
+            false,
+        );
+
+        $this->assertFalse($result->hasErrors());
+        $this->assertSame(1, $result->files());
+        $this->assertSame(0, $result->linesOfCode());
+        $this->assertSame(0, $result->commentLinesOfCode());
+        $this->assertSame(0, $result->nonCommentLinesOfCode());
+        $this->assertSame(0, $result->logicalLinesOfCode());
+    }
+
     public function testPrintsNameOfAnalysedFileWhenDebugIsEnabled(): void
     {
         $file = __DIR__ . '/../_fixture-single-line/single_line.php';

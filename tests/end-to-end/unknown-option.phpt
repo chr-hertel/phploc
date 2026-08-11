@@ -11,4 +11,4 @@ $_SERVER['argv'][] = __DIR__ . '/../_fixture';
 --EXPECTF--
 phploc %s by Sebastian Bergmann.
 
-Unknown option "--unknown"
+Unknown option "--unknown". Most similar options are %s

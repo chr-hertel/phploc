@@ -12,92 +12,92 @@ namespace SebastianBergmann\PHPLOC;
 final readonly class Result
 {
     /**
-     * @psalm-var list<non-empty-string>
+     * @var list<non-empty-string>
      */
     private array $errors;
 
     /**
-     * @psalm-var non-negative-int
+     * @var non-negative-int
      */
     private int $directories;
 
     /**
-     * @psalm-var non-negative-int
+     * @var non-negative-int
      */
     private int $files;
 
     /**
-     * @psalm-var non-negative-int
+     * @var non-negative-int
      */
     private int $linesOfCode;
 
     /**
-     * @psalm-var non-negative-int
+     * @var non-negative-int
      */
     private int $commentLinesOfCode;
 
     /**
-     * @psalm-var non-negative-int
+     * @var non-negative-int
      */
     private int $nonCommentLinesOfCode;
 
     /**
-     * @psalm-var non-negative-int
+     * @var non-negative-int
      */
     private int $logicalLinesOfCode;
 
     /**
-     * @psalm-var non-negative-int
+     * @var non-negative-int
      */
     private int $functions;
 
     /**
-     * @psalm-var non-negative-int
+     * @var non-negative-int
      */
     private int $lowestCyclomaticComplexityForFunction;
     private float $averageCyclomaticComplexityForFunction;
 
     /**
-     * @psalm-var non-negative-int
+     * @var non-negative-int
      */
     private int $highestCyclomaticComplexityForFunction;
 
     /**
-     * @psalm-var non-negative-int
+     * @var non-negative-int
      */
     private int $classesOrTraits;
 
     /**
-     * @psalm-var non-negative-int
+     * @var non-negative-int
      */
     private int $methods;
 
     /**
-     * @psalm-var non-negative-int
+     * @var non-negative-int
      */
     private int $lowestCyclomaticComplexityForMethod;
     private float $averageCyclomaticComplexityForMethod;
 
     /**
-     * @psalm-var non-negative-int
+     * @var non-negative-int
      */
     private int $highestCyclomaticComplexityForMethod;
 
     /**
-     * @psalm-param list<non-empty-string> $errors
-     * @psalm-param non-negative-int $directories
-     * @psalm-param non-negative-int $files
-     * @psalm-param non-negative-int $linesOfCode
-     * @psalm-param non-negative-int $commentLinesOfCode
-     * @psalm-param non-negative-int $nonCommentLinesOfCode
-     * @psalm-param non-negative-int $logicalLinesOfCode
-     * @psalm-param non-negative-int $functions
-     * @psalm-param non-negative-int $lowestCyclomaticComplexityForFunction
-     * @psalm-param non-negative-int $highestCyclomaticComplexityForFunction
-     * @psalm-param non-negative-int $classesOrTraits
-     * @psalm-param non-negative-int $methods
-     * @psalm-param non-negative-int $lowestCyclomaticComplexityForMethod
-     * @psalm-param non-negative-int $highestCyclomaticComplexityForMethod
+     * @param list<non-empty-string> $errors
+     * @param non-negative-int       $directories
+     * @param non-negative-int       $files
+     * @param non-negative-int       $linesOfCode
+     * @param non-negative-int       $commentLinesOfCode
+     * @param non-negative-int       $nonCommentLinesOfCode
+     * @param non-negative-int       $logicalLinesOfCode
+     * @param non-negative-int       $functions
+     * @param non-negative-int       $lowestCyclomaticComplexityForFunction
+     * @param non-negative-int       $highestCyclomaticComplexityForFunction
+     * @param non-negative-int       $classesOrTraits
+     * @param non-negative-int       $methods
+     * @param non-negative-int       $lowestCyclomaticComplexityForMethod
+     * @param non-negative-int       $highestCyclomaticComplexityForMethod
      */
     public function __construct(array $errors, int $directories, int $files, int $linesOfCode, int $commentLinesOfCode, int $nonCommentLinesOfCode, int $logicalLinesOfCode, int $functions, int $lowestCyclomaticComplexityForFunction, float $averageCyclomaticComplexityForFunction, int $highestCyclomaticComplexityForFunction, int $classesOrTraits, int $methods, int $lowestCyclomaticComplexityForMethod, float $averageCyclomaticComplexityForMethod, int $highestCyclomaticComplexityForMethod)
     {
@@ -120,7 +120,7 @@ final readonly class Result
     }
 
     /**
-     * @psalm-assert-if-true !empty $this->errors
+     * @phpstan-assert-if-true non-empty-list<non-empty-string> $this->errors
      */
     public function hasErrors(): bool
     {
@@ -128,7 +128,7 @@ final readonly class Result
     }
 
     /**
-     * @psalm-return list<non-empty-string>
+     * @return list<non-empty-string>
      */
     public function errors(): array
     {
@@ -136,7 +136,7 @@ final readonly class Result
     }
 
     /**
-     * @psalm-return non-negative-int
+     * @return non-negative-int
      */
     public function directories(): int
     {
@@ -144,7 +144,7 @@ final readonly class Result
     }
 
     /**
-     * @psalm-return non-negative-int
+     * @return non-negative-int
      */
     public function files(): int
     {
@@ -152,7 +152,7 @@ final readonly class Result
     }
 
     /**
-     * @psalm-return non-negative-int
+     * @return non-negative-int
      */
     public function linesOfCode(): int
     {
@@ -160,7 +160,7 @@ final readonly class Result
     }
 
     /**
-     * @psalm-return non-negative-int
+     * @return non-negative-int
      */
     public function commentLinesOfCode(): int
     {
@@ -177,7 +177,7 @@ final readonly class Result
     }
 
     /**
-     * @psalm-return non-negative-int
+     * @return non-negative-int
      */
     public function nonCommentLinesOfCode(): int
     {
@@ -194,7 +194,7 @@ final readonly class Result
     }
 
     /**
-     * @psalm-return non-negative-int
+     * @return non-negative-int
      */
     public function logicalLinesOfCode(): int
     {
@@ -211,7 +211,7 @@ final readonly class Result
     }
 
     /**
-     * @psalm-return non-negative-int
+     * @return non-negative-int
      */
     public function functions(): int
     {
@@ -219,7 +219,7 @@ final readonly class Result
     }
 
     /**
-     * @psalm-return non-negative-int
+     * @return non-negative-int
      */
     public function lowestCyclomaticComplexityForFunction(): int
     {
@@ -232,7 +232,7 @@ final readonly class Result
     }
 
     /**
-     * @psalm-return non-negative-int
+     * @return non-negative-int
      */
     public function highestCyclomaticComplexityForFunction(): int
     {
@@ -240,7 +240,7 @@ final readonly class Result
     }
 
     /**
-     * @psalm-return non-negative-int
+     * @return non-negative-int
      */
     public function methods(): int
     {
@@ -248,7 +248,7 @@ final readonly class Result
     }
 
     /**
-     * @psalm-return non-negative-int
+     * @return non-negative-int
      */
     public function lowestCyclomaticComplexityForMethod(): int
     {
@@ -261,7 +261,7 @@ final readonly class Result
     }
 
     /**
-     * @psalm-return non-negative-int
+     * @return non-negative-int
      */
     public function highestCyclomaticComplexityForMethod(): int
     {
@@ -269,7 +269,7 @@ final readonly class Result
     }
 
     /**
-     * @psalm-return non-negative-int
+     * @return non-negative-int
      */
     public function classesOrTraits(): int
     {

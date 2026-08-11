@@ -20,7 +20,7 @@ final class Application
     private const VERSION = '8.0';
 
     /**
-     * @psalm-param list<non-empty-string> $argv
+     * @param list<non-empty-string> $argv
      */
     public function run(array $argv): int
     {

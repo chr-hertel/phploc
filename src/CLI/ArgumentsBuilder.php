@@ -10,7 +10,6 @@
 namespace SebastianBergmann\PHPLOC;
 
 use function assert;
-use function is_array;
 use function is_string;
 use SebastianBergmann\CliParser\Exception as CliParserException;
 use SebastianBergmann\CliParser\Parser as CliParser;
@@ -18,7 +17,7 @@ use SebastianBergmann\CliParser\Parser as CliParser;
 final class ArgumentsBuilder
 {
     /**
-     * @psalm-param list<non-empty-string> $argv
+     * @param list<non-empty-string> $argv
      *
      * @throws ArgumentsBuilderException
      */
@@ -52,14 +51,12 @@ final class ArgumentsBuilder
         $version     = false;
 
         foreach ($options[1] as $directory) {
-            assert(is_string($directory) && !empty($directory));
+            assert($directory !== '');
 
             $directories[] = $directory;
         }
 
         foreach ($options[0] as $option) {
-            assert(is_array($option));
-
             switch ($option[0]) {
                 case '--suffix':
                     assert(is_string($option[1]) && !empty($option[1]));
