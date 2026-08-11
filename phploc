@@ -47,25 +47,6 @@ if (!\class_exists(Analyser::class)) {
 
 $version = (new Version('8.0', __DIR__))->asString();
 
-/**
- * The values that Symfony Console hands back are `mixed`; this narrows them to
- * what SebastianBergmann\FileIterator\Facade documents as its input.
- *
- * @return list<non-empty-string>
- */
-$listOfStrings = static function (mixed $value): array
-{
-    $result = [];
-
-    foreach ((array) $value as $item) {
-        \assert(\is_string($item) && $item !== '');
-
-        $result[] = $item;
-    }
-
-    return $result;
-};
-
 (new SingleCommandApplication)
     ->setName('phploc')
     ->setVersion($version)
@@ -99,7 +80,7 @@ $listOfStrings = static function (mixed $value): array
         'Print debugging information',
     )
     ->setCode(
-        static function (InputInterface $input, OutputInterface $output) use ($version, $listOfStrings): int
+        static function (InputInterface $input, OutputInterface $output) use ($version): int
         {
             $json = (bool) $input->getOption('json');
 
@@ -109,11 +90,15 @@ $listOfStrings = static function (mixed $value): array
                 $output->writeln('');
             }
 
+            // Symfony Console only ever hands back strings here.
+            /** @var list<non-empty-string> $suffixes */
+            $suffixes = ['.php', ...(array) $input->getOption('suffix')];
+
             $files = (new Facade)->getFilesAsArray(
-                $listOfStrings($input->getArgument('directory')),
-                ['.php', ...$listOfStrings($input->getOption('suffix'))],
+                $input->getArgument('directory'),
+                $suffixes,
                 '',
-                $listOfStrings($input->getOption('exclude')),
+                $input->getOption('exclude'),
             );
 
             if ($files === []) {
