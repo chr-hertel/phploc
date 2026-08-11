@@ -10,4 +10,4 @@ Usage:
   %s [options] [--] <directory>...
 
 Arguments:
-  directory%w%A--suffix=SUFFIX%A--exclude=EXCLUDE%A--debug%A
+  directory%w%A--json%A

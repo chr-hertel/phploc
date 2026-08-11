@@ -9,9 +9,6 @@
  */
 namespace Hertel\PhpLoc;
 
-use const PHP_EOL;
-use function ob_get_clean;
-use function ob_start;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -31,7 +28,6 @@ final class AnalyserTest extends TestCase
                 __DIR__ . '/../_fixture/ExampleInterface.php',
                 __DIR__ . '/../_fixture/ExampleTrait.php',
             ],
-            false,
         );
 
         $this->assertFalse($result->hasErrors());
@@ -53,7 +49,6 @@ final class AnalyserTest extends TestCase
                 __DIR__ . '/../_fixture/ExampleInterface.php',
                 __DIR__ . '/../_fixture-single-line/single_line.php',
             ],
-            false,
         );
 
         $this->assertSame(2, $result->directories());
@@ -64,7 +59,7 @@ final class AnalyserTest extends TestCase
     {
         $file = __DIR__ . '/../_fixture-invalid/InvalidClass.php';
 
-        $result = (new Analyser)->analyse([$file], false);
+        $result = (new Analyser)->analyse([$file]);
 
         $this->assertTrue($result->hasErrors());
         $this->assertCount(1, $result->errors());
@@ -78,7 +73,6 @@ final class AnalyserTest extends TestCase
                 __DIR__ . '/../_fixture-invalid/InvalidClass.php',
                 __DIR__ . '/../_fixture-single-line/single_line.php',
             ],
-            false,
         );
 
         $this->assertSame(2, $result->files());
@@ -91,7 +85,6 @@ final class AnalyserTest extends TestCase
             [
                 __DIR__ . '/../_fixture/ExampleInterface.php',
             ],
-            false,
         );
 
         $this->assertSame(0, $result->functions());
@@ -111,7 +104,6 @@ final class AnalyserTest extends TestCase
             [
                 __DIR__ . '/../_fixture-single-line/single_line.php',
             ],
-            false,
         );
 
         $this->assertSame(1, $result->linesOfCode());
@@ -125,7 +117,6 @@ final class AnalyserTest extends TestCase
             [
                 __DIR__ . '/../_fixture-empty/empty.php',
             ],
-            false,
         );
 
         $this->assertFalse($result->hasErrors());
@@ -134,18 +125,5 @@ final class AnalyserTest extends TestCase
         $this->assertSame(0, $result->commentLinesOfCode());
         $this->assertSame(0, $result->nonCommentLinesOfCode());
         $this->assertSame(0, $result->logicalLinesOfCode());
-    }
-
-    public function testPrintsNameOfAnalysedFileWhenDebugIsEnabled(): void
-    {
-        $file = __DIR__ . '/../_fixture-single-line/single_line.php';
-
-        ob_start();
-
-        (new Analyser)->analyse([$file], true);
-
-        $output = ob_get_clean();
-
-        $this->assertSame($file . PHP_EOL, $output);
     }
 }

@@ -8,7 +8,7 @@ Everything up to and including [7.0.2](https://github.com/sebastianbergmann/phpl
 
 ### Added
 
-* The `--json` CLI option prints the result as JSON instead of as text; it suppresses the version banner and cannot be combined with `--debug`
+* The `--json` CLI option prints the result as JSON instead of as text; it suppresses the version banner
 * Files that cannot be read are now reported like files that cannot be parsed instead of aborting the run
 
 ### Changed
@@ -20,6 +20,9 @@ Everything up to and including [7.0.2](https://github.com/sebastianbergmann/phpl
 
 ### Removed
 
+* The `--suffix` CLI option has been removed; only files with a name ending in `.php` are analysed
+* The `--exclude` CLI option has been removed
+* The `--debug` CLI option as well as the functionality it controlled has been removed; `Analyser::analyse()` no longer takes a `$debug` argument
 * The `--count-tests` CLI option as well as the functionality it controlled has been removed
 * The `--log-csv` CLI option as well as the functionality it controlled has been removed
 * The `--log-json` CLI option as well as the functionality it controlled has been removed

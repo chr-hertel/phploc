@@ -36,7 +36,7 @@ final class Analyser
     /**
      * @param list<non-empty-string> $files
      */
-    public function analyse(array $files, bool $debug): Result
+    public function analyse(array $files): Result
     {
         $errors      = [];
         $directories = [];
@@ -44,10 +44,6 @@ final class Analyser
         $linesOfCode = null;
 
         foreach ($files as $file) {
-            if ($debug) {
-                print $file . PHP_EOL;
-            }
-
             $directories[] = dirname($file);
 
             try {

@@ -56,28 +56,10 @@ $version = (new Version('8.0', __DIR__))->asString();
         'Directory to analyse',
     )
     ->addOption(
-        'suffix',
-        null,
-        InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
-        'Include files with names ending in <suffix> in the analysis (.php is always included)',
-    )
-    ->addOption(
-        'exclude',
-        null,
-        InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
-        'Exclude files with <path> in their path from the analysis',
-    )
-    ->addOption(
         'json',
         null,
         InputOption::VALUE_NONE,
-        'Print the result as JSON instead of as text (not combinable with --debug)',
-    )
-    ->addOption(
-        'debug',
-        null,
-        InputOption::VALUE_NONE,
-        'Print debugging information',
+        'Print the result as JSON instead of as text',
     )
     ->setCode(
         static function (InputInterface $input, OutputInterface $output) use ($version): int
@@ -90,16 +72,7 @@ $version = (new Version('8.0', __DIR__))->asString();
                 $output->writeln('');
             }
 
-            // Symfony Console only ever hands back strings here.
-            /** @var list<non-empty-string> $suffixes */
-            $suffixes = ['.php', ...(array) $input->getOption('suffix')];
-
-            $files = (new Facade)->getFilesAsArray(
-                $input->getArgument('directory'),
-                $suffixes,
-                '',
-                $input->getOption('exclude'),
-            );
+            $files = (new Facade)->getFilesAsArray($input->getArgument('directory'), '.php');
 
             if ($files === []) {
                 $output->writeln('No files found to scan');
@@ -107,7 +80,7 @@ $version = (new Version('8.0', __DIR__))->asString();
                 return Command::FAILURE;
             }
 
-            $result = (new Analyser)->analyse($files, (bool) $input->getOption('debug'));
+            $result = (new Analyser)->analyse($files);
 
             $output->write(
                 $json ? (new JsonResultFormatter)->format($result) : (new TextResultFormatter)->format($result),
