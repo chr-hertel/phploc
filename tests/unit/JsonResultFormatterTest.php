@@ -9,21 +9,24 @@
  */
 namespace Hertel\PhpLoc;
 
+use const JSON_THROW_ON_ERROR;
+use function array_keys;
+use function json_decode;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
-#[CoversClass(TextResultFormatter::class)]
+#[CoversClass(JsonResultFormatter::class)]
 #[UsesClass(Result::class)]
 #[Small]
-final class TextResultFormatterTest extends TestCase
+final class JsonResultFormatterTest extends TestCase
 {
-    public function testFormatsResultAsText(): void
+    public function testFormatsResultAsJson(): void
     {
         $this->assertStringEqualsFile(
-            __DIR__ . '/../_expectations/result.txt',
-            (new TextResultFormatter)->format(
+            __DIR__ . '/../_expectations/result.json',
+            (new JsonResultFormatter)->format(
                 new Result([], 1, 2, 10, 4, 6, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15),
             ),
         );
@@ -32,8 +35,8 @@ final class TextResultFormatterTest extends TestCase
     public function testFormatsErrors(): void
     {
         $this->assertStringEqualsFile(
-            __DIR__ . '/../_expectations/result-with-errors.txt',
-            (new TextResultFormatter)->format(
+            __DIR__ . '/../_expectations/result-with-errors.json',
+            (new JsonResultFormatter)->format(
                 new Result(
                     [
                         'Cannot parse /path/to/First.php: Syntax error',
@@ -59,23 +62,24 @@ final class TextResultFormatterTest extends TestCase
         );
     }
 
-    public function testDoesNotFormatComplexityOfFunctionsWhenThereAreNone(): void
+    public function testFormatsAllKeysEvenWhenThereAreNoClassesOrFunctions(): void
     {
-        $this->assertStringEqualsFile(
-            __DIR__ . '/../_expectations/result-without-functions.txt',
-            (new TextResultFormatter)->format(
-                new Result([], 1, 2, 10, 4, 6, 3, 0, 0, 0.0, 0, 11, 12, 13, 14.0, 15),
-            ),
-        );
-    }
-
-    public function testDoesNotFormatComplexityOfClassesOrFunctionsWhenThereAreNone(): void
-    {
-        $this->assertStringEqualsFile(
-            __DIR__ . '/../_expectations/result-without-classes-or-functions.txt',
-            (new TextResultFormatter)->format(
+        $json = json_decode(
+            (new JsonResultFormatter)->format(
                 new Result([], 1, 2, 10, 4, 6, 3, 0, 0, 0.0, 0, 0, 0, 0, 0.0, 0),
             ),
+            true,
+            flags: JSON_THROW_ON_ERROR,
         );
+
+        $this->assertSame(
+            ['directories', 'files', 'linesOfCode', 'classesOrTraits', 'methods', 'functions', 'errors'],
+            array_keys($json),
+        );
+
+        $this->assertSame(0, $json['functions']['count']);
+        $this->assertSame(0.0, $json['functions']['cyclomaticComplexity']['average']);
+        $this->assertSame(0, $json['methods']['count']);
+        $this->assertSame(0.0, $json['methods']['cyclomaticComplexity']['average']);
     }
 }

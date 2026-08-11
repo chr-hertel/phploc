@@ -8,9 +8,10 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use Hertel\PhpLoc\Analyser;
+use Hertel\PhpLoc\JsonResultFormatter;
+use Hertel\PhpLoc\TextResultFormatter;
 use SebastianBergmann\FileIterator\Facade;
-use SebastianBergmann\PHPLOC\Analyser;
-use SebastianBergmann\PHPLOC\TextResultFormatter;
 use SebastianBergmann\Version;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -86,6 +87,12 @@ $listOfStrings = static function (mixed $value): array
         'Exclude files with <path> in their path from the analysis',
     )
     ->addOption(
+        'json',
+        null,
+        InputOption::VALUE_NONE,
+        'Print the result as JSON instead of as text (not combinable with --debug)',
+    )
+    ->addOption(
         'debug',
         null,
         InputOption::VALUE_NONE,
@@ -94,8 +101,13 @@ $listOfStrings = static function (mixed $value): array
     ->setCode(
         static function (InputInterface $input, OutputInterface $output) use ($version, $listOfStrings): int
         {
-            $output->writeln(\sprintf('phploc %s by Sebastian Bergmann.', $version));
-            $output->writeln('');
+            $json = (bool) $input->getOption('json');
+
+            // The banner would make the output invalid JSON.
+            if (!$json) {
+                $output->writeln(\sprintf('phploc %s by Sebastian Bergmann.', $version));
+                $output->writeln('');
+            }
 
             $files = (new Facade)->getFilesAsArray(
                 $listOfStrings($input->getArgument('directory')),
@@ -110,10 +122,10 @@ $listOfStrings = static function (mixed $value): array
                 return Command::FAILURE;
             }
 
+            $result = (new Analyser)->analyse($files, (bool) $input->getOption('debug'));
+
             $output->write(
-                (new TextResultFormatter)->format(
-                    (new Analyser)->analyse($files, (bool) $input->getOption('debug')),
-                ),
+                $json ? (new JsonResultFormatter)->format($result) : (new TextResultFormatter)->format($result),
             );
 
             return Command::SUCCESS;

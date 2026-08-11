@@ -1,17 +1,23 @@
 {
-    "name": "phploc/phploc",
+    "name": "hertel/phploc",
     "description": "A tool for quickly measuring the size of a PHP project",
-    "homepage": "https://github.com/sebastianbergmann/phploc",
+    "homepage": "https://github.com/chr-hertel/phploc",
     "license": "BSD-3-Clause",
     "authors": [
         {
             "name": "Sebastian Bergmann",
             "email": "sebastian@phpunit.de",
-            "role": "lead"
+            "role": "Original author of PHPLOC"
+        },
+        {
+            "name": "Christopher Hertel",
+            "email": "mail@christopher-hertel.de",
+            "role": "Maintainer of this fork"
         }
     ],
     "support": {
-        "issues": "https://github.com/sebastianbergmann/phploc/issues"
+        "issues": "https://github.com/chr-hertel/phploc/issues",
+        "source": "https://github.com/chr-hertel/phploc"
     },
     "config": {
         "platform": {

@@ -1,0 +1,31 @@
+{
+    "directories": 1,
+    "files": 2,
+    "linesOfCode": {
+        "total": 10,
+        "comment": 4,
+        "commentPercentage": 40.0,
+        "nonComment": 6,
+        "nonCommentPercentage": 60.0,
+        "logical": 3,
+        "logicalPercentage": 30.0
+    },
+    "classesOrTraits": 11,
+    "methods": {
+        "count": 12,
+        "cyclomaticComplexity": {
+            "lowest": 13,
+            "average": 14.0,
+            "highest": 15
+        }
+    },
+    "functions": {
+        "count": 7,
+        "cyclomaticComplexity": {
+            "lowest": 8,
+            "average": 9.0,
+            "highest": 10
+        }
+    },
+    "errors": []
+}
