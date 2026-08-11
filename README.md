@@ -6,18 +6,37 @@
 
 PHPLOC was created and maintained by [Sebastian Bergmann](https://github.com/sebastianbergmann) as
 [`phploc/phploc`](https://github.com/sebastianbergmann/phploc) from 2009 onwards, until he stopped maintaining it and
-kept the repository for archival purposes. Every idea, every metric, and nearly every line of the original
-implementation is his work, and this fork stands entirely on it. Thank you, Sebastian.
+kept the repository for archival purposes. Every idea, every metric, and the shape of the report are his work, and this
+fork stands entirely on it. Thank you, Sebastian.
 
 This fork exists for one reason: [OSS Complexity Report](https://christopher-hertel.de/oss-complexity-report/) runs
 `phploc` at its core, so the tool needs a maintained home. It is published as `hertel/phploc` and maintained by
 [Christopher Hertel](https://github.com/chr-hertel), under the original BSD-3-Clause license with the original copyright
 notice intact.
 
-The measurements themselves are still not this project's own work: lines of code and cyclomatic complexity are
-calculated by Sebastian Bergmann's [`sebastian/lines-of-code`](https://github.com/sebastianbergmann/lines-of-code) and
-[`sebastian/complexity`](https://github.com/sebastianbergmann/complexity) libraries, and the parsing by
-[`nikic/php-parser`](https://github.com/nikic/PHP-Parser).
+That purpose is what this fork is built around, and it is worth being explicit about what it means, because it is not
+the same as continuing the original project:
+
+* **It is shaped by one consumer.** Decisions are made for what the OSS Complexity Report needs — measuring many open
+  source packages, unattended, and comparing the numbers over time. Where the original left a choice to the user, this
+  fork tends to pick one behaviour and keep it. The `--suffix`, `--exclude`, `--debug`, and `--count-tests` options are
+  gone for that reason, and so are the CSV and XML logs; `--json` covers machine-readable output.
+* **Test code is separated from production code by default.** A size or complexity number that mixes a project's tests
+  into its production code says little about either, so test classes and test methods are reported on their own.
+* **It measures the syntax tree, not the token stream.** The original scanned tokens, which could not see enums,
+  anonymous classes, or arrow functions, and could not tell a property access from a method call. Everything is parsed
+  with [`nikic/php-parser`](https://github.com/nikic/PHP-Parser) now, which is also why some numbers differ from the
+  ones the original reported for the same code.
+* **The measurements are still not this project's own work.** Lines of code and cyclomatic complexity come from
+  Sebastian Bergmann's [`sebastian/lines-of-code`](https://github.com/sebastianbergmann/lines-of-code) and
+  [`sebastian/complexity`](https://github.com/sebastianbergmann/complexity) libraries. This tool decides what to count
+  and how to group it; those libraries decide what a logical line and a decision point are.
+* **It is not a drop-in replacement.** The class names live in the `Hertel\PhpLoc` namespace so that both packages can
+  be installed side by side, the tool is a Composer dependency rather than a PHAR, and it requires PHP 8.4. See
+  [`ChangeLog.md`](ChangeLog.md) for everything that changed.
+
+If you want the original, unchanged, use `phploc/phploc`. If you want a `phploc` that is still maintained and is happy
+to keep moving, use this one.
 
 This fork is not affiliated with, supported by, or endorsed by Sebastian Bergmann. Please report issues with it
 [here](https://github.com/chr-hertel/phploc/issues), never to the original project.
