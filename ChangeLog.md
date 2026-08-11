@@ -4,6 +4,11 @@ All notable changes in PHPLOC are documented in this file using the [Keep a CHAN
 
 ## [8.0.0] - 202Y-MM-DD
 
+### Changed
+
+* The CLI is now built on `symfony/console`; `-v` is Symfony Console's verbosity option, the version is printed by `-V`/`--version`, and `--help` renders Symfony Console's help screen
+* This tool is now installed using Composer instead of being distributed as a PHP Archive (PHAR)
+
 ### Removed
 
 * The `--count-tests` CLI option as well as the functionality it controlled has been removed

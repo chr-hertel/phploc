@@ -11,7 +11,8 @@ EOF;
 $finder = PhpCsFixer\Finder::create()
     ->files()
     ->in(__DIR__ . '/src')
-    ->in(__DIR__ . '/tests/unit');
+    ->in(__DIR__ . '/tests/unit')
+    ->append([__DIR__ . '/phploc']);
 
 $config = new PhpCsFixer\Config;
 $config->setFinder($finder)

@@ -2,11 +2,9 @@
 phploc ../_fixture
 --FILE--
 <?php declare(strict_types=1);
-require __DIR__ . '/../../vendor/autoload.php';
+require __DIR__ . '/_phploc.php';
 
-$_SERVER['argv'][] = __DIR__ . '/../_fixture';
-
-(new SebastianBergmann\PHPLOC\Application)->run($_SERVER['argv']);
+phploc(__DIR__ . '/../_fixture');
 --EXPECTF--
 phploc %s by Sebastian Bergmann.
 

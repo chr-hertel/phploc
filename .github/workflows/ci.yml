@@ -28,8 +28,11 @@ jobs:
           php-version: 8.4
           coverage: none
 
+      - name: Install dependencies with Composer
+        run: composer update --no-interaction --no-ansi --no-progress
+
       - name: Run PHP-CS-Fixer
-        run: ./tools/php-cs-fixer fix --dry-run --show-progress=dots --using-cache=no --verbose
+        run: ./vendor/bin/php-cs-fixer fix --dry-run --show-progress=dots --using-cache=no --verbose
 
   static-analysis:
     name: Static Analysis
@@ -47,10 +50,10 @@ jobs:
           coverage: none
 
       - name: Install dependencies with Composer
-        run: ./tools/composer update --no-interaction --no-ansi --no-progress
+        run: composer update --no-interaction --no-ansi --no-progress
 
       - name: Run PHPStan
-        run: ./tools/phpstan analyse --no-progress --error-format=github
+        run: ./vendor/bin/phpstan analyse --no-progress --error-format=github
 
   tests:
     name: Tests
@@ -75,10 +78,10 @@ jobs:
           coverage: "pcov"
 
       - name: "Install dependencies with Composer"
-        run: "./tools/composer update --no-ansi --no-interaction --no-progress"
+        run: "composer update --no-ansi --no-interaction --no-progress"
 
       - name: "Run tests with PHPUnit"
-        run: "./tools/phpunit --coverage-clover=coverage.xml"
+        run: "./vendor/bin/phpunit --coverage-clover=coverage.xml"
 
       - name: "Send code coverage report to Codecov.io"
         uses: "codecov/codecov-action@v5"

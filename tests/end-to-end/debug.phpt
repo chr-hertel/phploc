@@ -2,12 +2,9 @@
 phploc --debug ../_fixture-single-line
 --FILE--
 <?php declare(strict_types=1);
-require __DIR__ . '/../../vendor/autoload.php';
+require __DIR__ . '/_phploc.php';
 
-$_SERVER['argv'][] = '--debug';
-$_SERVER['argv'][] = __DIR__ . '/../_fixture-single-line';
-
-(new SebastianBergmann\PHPLOC\Application)->run($_SERVER['argv']);
+phploc('--debug', __DIR__ . '/../_fixture-single-line');
 --EXPECTF--
 phploc %s by Sebastian Bergmann.
 
