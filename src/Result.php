@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+
 /*
  * This file is part of PHPLOC.
  *
@@ -7,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Hertel\PhpLoc;
 
 final readonly class Result
@@ -101,22 +103,22 @@ final readonly class Result
      */
     public function __construct(array $errors, int $directories, int $files, int $linesOfCode, int $commentLinesOfCode, int $nonCommentLinesOfCode, int $logicalLinesOfCode, int $functions, int $lowestCyclomaticComplexityForFunction, float $averageCyclomaticComplexityForFunction, int $highestCyclomaticComplexityForFunction, int $classesOrTraits, int $methods, int $lowestCyclomaticComplexityForMethod, float $averageCyclomaticComplexityForMethod, int $highestCyclomaticComplexityForMethod)
     {
-        $this->errors                                 = $errors;
-        $this->directories                            = $directories;
-        $this->files                                  = $files;
-        $this->linesOfCode                            = $linesOfCode;
-        $this->commentLinesOfCode                     = $commentLinesOfCode;
-        $this->nonCommentLinesOfCode                  = $nonCommentLinesOfCode;
-        $this->logicalLinesOfCode                     = $logicalLinesOfCode;
-        $this->functions                              = $functions;
-        $this->lowestCyclomaticComplexityForFunction  = $lowestCyclomaticComplexityForFunction;
+        $this->errors = $errors;
+        $this->directories = $directories;
+        $this->files = $files;
+        $this->linesOfCode = $linesOfCode;
+        $this->commentLinesOfCode = $commentLinesOfCode;
+        $this->nonCommentLinesOfCode = $nonCommentLinesOfCode;
+        $this->logicalLinesOfCode = $logicalLinesOfCode;
+        $this->functions = $functions;
+        $this->lowestCyclomaticComplexityForFunction = $lowestCyclomaticComplexityForFunction;
         $this->averageCyclomaticComplexityForFunction = $averageCyclomaticComplexityForFunction;
         $this->highestCyclomaticComplexityForFunction = $highestCyclomaticComplexityForFunction;
-        $this->classesOrTraits                        = $classesOrTraits;
-        $this->methods                                = $methods;
-        $this->lowestCyclomaticComplexityForMethod    = $lowestCyclomaticComplexityForMethod;
-        $this->averageCyclomaticComplexityForMethod   = $averageCyclomaticComplexityForMethod;
-        $this->highestCyclomaticComplexityForMethod   = $highestCyclomaticComplexityForMethod;
+        $this->classesOrTraits = $classesOrTraits;
+        $this->methods = $methods;
+        $this->lowestCyclomaticComplexityForMethod = $lowestCyclomaticComplexityForMethod;
+        $this->averageCyclomaticComplexityForMethod = $averageCyclomaticComplexityForMethod;
+        $this->highestCyclomaticComplexityForMethod = $highestCyclomaticComplexityForMethod;
     }
 
     /**
@@ -124,7 +126,7 @@ final readonly class Result
      */
     public function hasErrors(): bool
     {
-        return $this->errors !== [];
+        return [] !== $this->errors;
     }
 
     /**
@@ -169,7 +171,7 @@ final readonly class Result
 
     public function commentLinesOfCodePercentage(): float
     {
-        if ($this->linesOfCode() === 0) {
+        if (0 === $this->linesOfCode()) {
             return 0.0;
         }
 
@@ -186,7 +188,7 @@ final readonly class Result
 
     public function nonCommentLinesOfCodePercentage(): float
     {
-        if ($this->linesOfCode() === 0) {
+        if (0 === $this->linesOfCode()) {
             return 0.0;
         }
 
@@ -203,7 +205,7 @@ final readonly class Result
 
     public function logicalLinesOfCodePercentage(): float
     {
-        if ($this->linesOfCode() === 0) {
+        if (0 === $this->linesOfCode()) {
             return 0.0;
         }
 

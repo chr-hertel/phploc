@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+
 /*
  * This file is part of PHPLOC.
  *
@@ -7,19 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Hertel\PhpLoc;
 
-use function array_sum;
-use function array_unique;
-use function assert;
-use function count;
-use function dirname;
-use function explode;
-use function file_get_contents;
-use function max;
-use function min;
-use function sprintf;
-use function substr_count;
 use PhpParser\Error;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
@@ -38,26 +29,26 @@ final class Analyser
      */
     public function analyse(array $files): Result
     {
-        $errors      = [];
+        $errors = [];
         $directories = [];
-        $complexity  = ComplexityCollection::fromList();
+        $complexity = ComplexityCollection::fromList();
         $linesOfCode = null;
 
         foreach ($files as $file) {
-            $directories[] = dirname($file);
+            $directories[] = \dirname($file);
 
             try {
                 $result = $this->analyseFile($file);
 
                 $complexity = $complexity->mergeWith($result['complexity']);
 
-                if ($result['linesOfCode'] !== null) {
-                    $linesOfCode = $linesOfCode === null ? $result['linesOfCode'] : $linesOfCode->plus($result['linesOfCode']);
+                if (null !== $result['linesOfCode']) {
+                    $linesOfCode = null === $linesOfCode ? $result['linesOfCode'] : $linesOfCode->plus($result['linesOfCode']);
                 }
             } catch (ParserException $e) {
                 $message = $e->getMessage();
 
-                assert($message !== '');
+                \assert('' !== $message);
 
                 $errors[] = $message;
             }
@@ -66,21 +57,21 @@ final class Analyser
         $classesOrTraits = [];
 
         foreach ($complexity->isMethod() as $item) {
-            $classesOrTraits[] = explode('::', $item->name())[0];
+            $classesOrTraits[] = \explode('::', $item->name())[0];
         }
 
-        $classesOrTraits     = count(array_unique($classesOrTraits));
+        $classesOrTraits = \count(\array_unique($classesOrTraits));
         $complexityFunctions = $complexity->isFunction();
-        $numberOfFunctions   = $complexityFunctions->count();
+        $numberOfFunctions = $complexityFunctions->count();
         $complexityFunctions = $this->cyclomaticComplexityStatistics($complexityFunctions);
-        $complexityMethods   = $complexity->isMethod();
-        $numberOfMethods     = $complexityMethods->count();
-        $complexityMethods   = $this->cyclomaticComplexityStatistics($complexityMethods);
+        $complexityMethods = $complexity->isMethod();
+        $numberOfMethods = $complexityMethods->count();
+        $complexityMethods = $this->cyclomaticComplexityStatistics($complexityMethods);
 
         return new Result(
             $errors,
-            count(array_unique($directories)),
-            count($files),
+            \count(\array_unique($directories)),
+            \count($files),
             $linesOfCode?->linesOfCode() ?? 0,
             $linesOfCode?->commentLinesOfCode() ?? 0,
             $linesOfCode?->nonCommentLinesOfCode() ?? 0,
@@ -100,74 +91,61 @@ final class Analyser
     /**
      * @param non-empty-string $file
      *
-     * @throws ParserException
-     *
      * @return array{complexity: ComplexityCollection, linesOfCode: ?LinesOfCode}
+     *
+     * @throws ParserException
      */
     private function analyseFile(string $file): array
     {
-        $source = file_get_contents($file);
+        $source = \file_get_contents($file);
 
-        if ($source === false) {
-            throw new ParserException(
-                sprintf(
-                    'Cannot read %s',
-                    $file,
-                ),
-            );
+        if (false === $source) {
+            throw new ParserException(\sprintf('Cannot read %s', $file));
         }
 
-        if ($source === '') {
+        if ('' === $source) {
             return [
-                'complexity'  => ComplexityCollection::fromList(),
+                'complexity' => ComplexityCollection::fromList(),
                 'linesOfCode' => null,
             ];
         }
 
         $parser = $this->parser();
-        $lines  = substr_count($source, "\n");
+        $lines = \substr_count($source, "\n");
 
-        if ($lines === 0) {
+        if (0 === $lines) {
             $lines = 1;
         }
 
         try {
             $nodes = $parser->parse($source);
 
-            assert($nodes !== null);
+            \assert(null !== $nodes);
 
-            $traverser = new NodeTraverser;
+            $traverser = new NodeTraverser();
 
             $complexityCalculatingVisitor = new ComplexityCalculatingVisitor(false);
-            $lineCountingVisitor          = new LineCountingVisitor($lines);
+            $lineCountingVisitor = new LineCountingVisitor($lines);
 
-            $traverser->addVisitor(new NameResolver);
-            $traverser->addVisitor(new ParentConnectingVisitor);
+            $traverser->addVisitor(new NameResolver());
+            $traverser->addVisitor(new ParentConnectingVisitor());
             $traverser->addVisitor($complexityCalculatingVisitor);
             $traverser->addVisitor($lineCountingVisitor);
 
             $traverser->traverse($nodes);
         } catch (Error $error) {
-            throw new ParserException(
-                sprintf(
-                    'Cannot parse %s: %s',
-                    $file,
-                    $error->getMessage(),
-                ),
-                $error->getCode(),
-                $error,
-            );
+            throw new ParserException(\sprintf('Cannot parse %s: %s', $file, $error->getMessage()), $error->getCode(), $error);
         }
 
         return [
-            'complexity'  => $complexityCalculatingVisitor->result(),
+            'complexity' => $complexityCalculatingVisitor->result(),
             'linesOfCode' => $lineCountingVisitor->result(),
         ];
     }
 
     private function parser(): Parser
     {
-        return (new ParserFactory)->createForNewestSupportedVersion();
+        return (new ParserFactory())->createForNewestSupportedVersion();
     }
 
     /**
@@ -182,9 +160,9 @@ final class Analyser
         }
 
         return [
-            'minimum' => !empty($values) ? min($values) : 0,
-            'maximum' => !empty($values) ? max($values) : 0,
-            'average' => !empty($values) ? array_sum($values) / count($values) : 0,
+            'minimum' => !empty($values) ? \min($values) : 0,
+            'maximum' => !empty($values) ? \max($values) : 0,
+            'average' => !empty($values) ? \array_sum($values) / \count($values) : 0,
         ];
     }
 }

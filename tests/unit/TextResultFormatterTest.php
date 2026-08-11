@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+
 /*
  * This file is part of PHPLOC.
  *
@@ -7,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Hertel\PhpLoc;
 
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -22,8 +24,8 @@ final class TextResultFormatterTest extends TestCase
     public function testFormatsResultAsText(): void
     {
         $this->assertStringEqualsFile(
-            __DIR__ . '/../_expectations/result.txt',
-            (new TextResultFormatter)->format(
+            __DIR__.'/../_expectations/result.txt',
+            (new TextResultFormatter())->format(
                 new Result([], 1, 2, 10, 4, 6, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15),
             ),
         );
@@ -32,8 +34,8 @@ final class TextResultFormatterTest extends TestCase
     public function testFormatsErrors(): void
     {
         $this->assertStringEqualsFile(
-            __DIR__ . '/../_expectations/result-with-errors.txt',
-            (new TextResultFormatter)->format(
+            __DIR__.'/../_expectations/result-with-errors.txt',
+            (new TextResultFormatter())->format(
                 new Result(
                     [
                         'Cannot parse /path/to/First.php: Syntax error',
@@ -62,8 +64,8 @@ final class TextResultFormatterTest extends TestCase
     public function testDoesNotFormatComplexityOfFunctionsWhenThereAreNone(): void
     {
         $this->assertStringEqualsFile(
-            __DIR__ . '/../_expectations/result-without-functions.txt',
-            (new TextResultFormatter)->format(
+            __DIR__.'/../_expectations/result-without-functions.txt',
+            (new TextResultFormatter())->format(
                 new Result([], 1, 2, 10, 4, 6, 3, 0, 0, 0.0, 0, 11, 12, 13, 14.0, 15),
             ),
         );
@@ -72,8 +74,8 @@ final class TextResultFormatterTest extends TestCase
     public function testDoesNotFormatComplexityOfClassesOrFunctionsWhenThereAreNone(): void
     {
         $this->assertStringEqualsFile(
-            __DIR__ . '/../_expectations/result-without-classes-or-functions.txt',
-            (new TextResultFormatter)->format(
+            __DIR__.'/../_expectations/result-without-classes-or-functions.txt',
+            (new TextResultFormatter())->format(
                 new Result([], 1, 2, 10, 4, 6, 3, 0, 0, 0.0, 0, 0, 0, 0, 0.0, 0),
             ),
         );

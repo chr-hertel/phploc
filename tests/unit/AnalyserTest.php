@@ -1,4 +1,5 @@
-<?php declare(strict_types=1);
+<?php
+
 /*
  * This file is part of PHPLOC.
  *
@@ -7,6 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+
 namespace Hertel\PhpLoc;
 
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -21,12 +23,12 @@ final class AnalyserTest extends TestCase
 {
     public function testAnalysesFiles(): void
     {
-        $result = (new Analyser)->analyse(
+        $result = (new Analyser())->analyse(
             [
-                __DIR__ . '/../_fixture/example_function.php',
-                __DIR__ . '/../_fixture/ExampleClass.php',
-                __DIR__ . '/../_fixture/ExampleInterface.php',
-                __DIR__ . '/../_fixture/ExampleTrait.php',
+                __DIR__.'/../_fixture/example_function.php',
+                __DIR__.'/../_fixture/ExampleClass.php',
+                __DIR__.'/../_fixture/ExampleInterface.php',
+                __DIR__.'/../_fixture/ExampleTrait.php',
             ],
         );
 
@@ -44,10 +46,10 @@ final class AnalyserTest extends TestCase
 
     public function testCountsDirectoriesThatContainAnalysedFiles(): void
     {
-        $result = (new Analyser)->analyse(
+        $result = (new Analyser())->analyse(
             [
-                __DIR__ . '/../_fixture/ExampleInterface.php',
-                __DIR__ . '/../_fixture-single-line/single_line.php',
+                __DIR__.'/../_fixture/ExampleInterface.php',
+                __DIR__.'/../_fixture-single-line/single_line.php',
             ],
         );
 
@@ -57,21 +59,21 @@ final class AnalyserTest extends TestCase
 
     public function testCollectsErrorForFileThatCannotBeParsed(): void
     {
-        $file = __DIR__ . '/../_fixture-invalid/InvalidClass.php';
+        $file = __DIR__.'/../_fixture-invalid/InvalidClass.php';
 
-        $result = (new Analyser)->analyse([$file]);
+        $result = (new Analyser())->analyse([$file]);
 
         $this->assertTrue($result->hasErrors());
         $this->assertCount(1, $result->errors());
-        $this->assertStringStartsWith('Cannot parse ' . $file . ':', $result->errors()[0]);
+        $this->assertStringStartsWith('Cannot parse '.$file.':', $result->errors()[0]);
     }
 
     public function testCountsFileThatCannotBeParsedButDoesNotMeasureIt(): void
     {
-        $result = (new Analyser)->analyse(
+        $result = (new Analyser())->analyse(
             [
-                __DIR__ . '/../_fixture-invalid/InvalidClass.php',
-                __DIR__ . '/../_fixture-single-line/single_line.php',
+                __DIR__.'/../_fixture-invalid/InvalidClass.php',
+                __DIR__.'/../_fixture-single-line/single_line.php',
             ],
         );
 
@@ -81,9 +83,9 @@ final class AnalyserTest extends TestCase
 
     public function testAnalysesFileWithoutFunctionsOrMethods(): void
     {
-        $result = (new Analyser)->analyse(
+        $result = (new Analyser())->analyse(
             [
-                __DIR__ . '/../_fixture/ExampleInterface.php',
+                __DIR__.'/../_fixture/ExampleInterface.php',
             ],
         );
 
@@ -100,9 +102,9 @@ final class AnalyserTest extends TestCase
 
     public function testAnalysesFileThatDoesNotEndWithNewline(): void
     {
-        $result = (new Analyser)->analyse(
+        $result = (new Analyser())->analyse(
             [
-                __DIR__ . '/../_fixture-single-line/single_line.php',
+                __DIR__.'/../_fixture-single-line/single_line.php',
             ],
         );
 
@@ -113,9 +115,9 @@ final class AnalyserTest extends TestCase
 
     public function testAnalysesEmptyFile(): void
     {
-        $result = (new Analyser)->analyse(
+        $result = (new Analyser())->analyse(
             [
-                __DIR__ . '/../_fixture-empty/empty.php',
+                __DIR__.'/../_fixture-empty/empty.php',
             ],
         );
 

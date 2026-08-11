@@ -1,5 +1,6 @@
 #!/usr/bin/env php
-<?php declare(strict_types=1);
+<?php
+
 /*
  * This file is part of PHPLOC.
  *
@@ -20,11 +21,11 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\SingleCommandApplication;
 
-if (!\class_exists(Analyser::class)) {
+if (!class_exists(Analyser::class)) {
     $loaded = false;
 
-    foreach ([__DIR__ . '/../../autoload.php', __DIR__ . '/vendor/autoload.php'] as $file) {
-        if (\file_exists($file)) {
+    foreach ([__DIR__.'/../../autoload.php', __DIR__.'/vendor/autoload.php'] as $file) {
+        if (file_exists($file)) {
             require $file;
 
             $loaded = true;
@@ -34,11 +35,11 @@ if (!\class_exists(Analyser::class)) {
     }
 
     if (!$loaded) {
-        \fwrite(
-            STDERR,
-            'You need to set up the project dependencies using the following commands:' . PHP_EOL .
-            'wget https://getcomposer.org/composer.phar' . PHP_EOL .
-            'php composer.phar install' . PHP_EOL,
+        fwrite(
+            \STDERR,
+            'You need to set up the project dependencies using the following commands:'.\PHP_EOL.
+            'wget https://getcomposer.org/composer.phar'.\PHP_EOL.
+            'php composer.phar install'.\PHP_EOL,
         );
 
         exit(1);
@@ -47,7 +48,7 @@ if (!\class_exists(Analyser::class)) {
 
 $version = (new Version('8.0', __DIR__))->asString();
 
-(new SingleCommandApplication)
+(new SingleCommandApplication())
     ->setName('phploc')
     ->setVersion($version)
     ->addArgument(
@@ -62,28 +63,27 @@ $version = (new Version('8.0', __DIR__))->asString();
         'Print the result as JSON instead of as text',
     )
     ->setCode(
-        static function (InputInterface $input, OutputInterface $output) use ($version): int
-        {
+        static function (InputInterface $input, OutputInterface $output) use ($version): int {
             $json = (bool) $input->getOption('json');
 
             // The banner would make the output invalid JSON.
             if (!$json) {
-                $output->writeln(\sprintf('phploc %s by Sebastian Bergmann.', $version));
+                $output->writeln(sprintf('phploc %s by Sebastian Bergmann.', $version));
                 $output->writeln('');
             }
 
-            $files = (new Facade)->getFilesAsArray($input->getArgument('directory'), '.php');
+            $files = (new Facade())->getFilesAsArray($input->getArgument('directory'), '.php');
 
-            if ($files === []) {
+            if ([] === $files) {
                 $output->writeln('No files found to scan');
 
                 return Command::FAILURE;
             }
 
-            $result = (new Analyser)->analyse($files);
+            $result = (new Analyser())->analyse($files);
 
             $output->write(
-                $json ? (new JsonResultFormatter)->format($result) : (new TextResultFormatter)->format($result),
+                $json ? (new JsonResultFormatter())->format($result) : (new TextResultFormatter())->format($result),
             );
 
             return Command::SUCCESS;
