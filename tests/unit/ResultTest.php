@@ -13,15 +13,22 @@ namespace Hertel\PhpLoc;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Small;
+use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(Result::class)]
+#[UsesClass(Complexity::class)]
+#[UsesClass(Dependencies::class)]
+#[UsesClass(Size::class)]
+#[UsesClass(Statistics::class)]
+#[UsesClass(Structure::class)]
+#[UsesClass(Tests::class)]
 #[Small]
 final class ResultTest extends TestCase
 {
     public function testMayHaveNoErrors(): void
     {
-        $result = new Result([], 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
+        $result = $this->createResult();
 
         $this->assertFalse($result->hasErrors());
         $this->assertSame([], $result->errors());
@@ -29,147 +36,52 @@ final class ResultTest extends TestCase
 
     public function testMayHaveErrors(): void
     {
-        $result = new Result(['error'], 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
+        $result = $this->createResult(['error']);
 
         $this->assertTrue($result->hasErrors());
         $this->assertSame(['error'], $result->errors());
     }
 
-    public function testHasDirectories(): void
+    public function testHasDirectoriesAndFiles(): void
     {
-        $result = new Result([], 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
+        $result = $this->createResult();
 
         $this->assertSame(1, $result->directories());
-    }
-
-    public function testHasFiles(): void
-    {
-        $result = new Result([], 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15);
-
         $this->assertSame(2, $result->files());
     }
 
-    public function testHasLinesOfCode(): void
+    public function testHasTheSectionsOfTheReport(): void
     {
-        $result = new Result([], 1, 2, 10, 4, 6, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15);
+        $result = $this->createResult();
 
-        $this->assertSame(10, $result->linesOfCode());
+        $this->assertSame(10, $result->size()->linesOfCode());
+        $this->assertSame(0.5, $result->complexity()->averagePerLogicalLine());
+        $this->assertSame(1, $result->dependencies()->globalAccesses());
+        $this->assertSame(2, $result->structure()->namespaces());
     }
 
-    public function testHasCommentLinesOfCode(): void
+    public function testHasTests(): void
     {
-        $result = new Result([], 1, 2, 10, 4, 6, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15);
+        $result = $this->createResult([], new Tests(3, 4));
 
-        $this->assertSame(4, $result->commentLinesOfCode());
+        $this->assertSame(3, $result->tests()->classes());
+        $this->assertSame(4, $result->tests()->methods());
     }
 
-    public function testHasCommentLinesOfCodePercentage(): void
+    /**
+     * @param list<non-empty-string> $errors
+     */
+    private function createResult(array $errors = [], ?Tests $tests = null): Result
     {
-        $result = new Result([], 1, 2, 10, 4, 6, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15);
-
-        $this->assertSame(40.0, $result->commentLinesOfCodePercentage());
-
-        $result = new Result([], 1, 2, 0, 0, 0, 0, 7, 8, 9, 10, 11, 12, 13, 14, 15);
-
-        $this->assertSame(0.0, $result->commentLinesOfCodePercentage());
-    }
-
-    public function testHasNonCommentLinesOfCode(): void
-    {
-        $result = new Result([], 1, 2, 10, 4, 6, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15);
-
-        $this->assertSame(6, $result->nonCommentLinesOfCode());
-    }
-
-    public function testHasNonCommentLinesOfCodePercentage(): void
-    {
-        $result = new Result([], 1, 2, 10, 4, 6, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15);
-
-        $this->assertSame(60.0, $result->nonCommentLinesOfCodePercentage());
-
-        $result = new Result([], 1, 2, 0, 0, 0, 0, 7, 8, 9, 10, 11, 12, 13, 14, 15);
-
-        $this->assertSame(0.0, $result->nonCommentLinesOfCodePercentage());
-    }
-
-    public function testHasLogicalLinesOfCode(): void
-    {
-        $result = new Result([], 1, 2, 10, 4, 6, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15);
-
-        $this->assertSame(3, $result->logicalLinesOfCode());
-    }
-
-    public function testHasLogicalLinesOfCodePercentage(): void
-    {
-        $result = new Result([], 1, 2, 10, 4, 6, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15);
-
-        $this->assertSame(30.0, $result->logicalLinesOfCodePercentage());
-
-        $result = new Result([], 1, 2, 0, 0, 0, 0, 7, 8, 9, 10, 11, 12, 13, 14, 15);
-
-        $this->assertSame(0.0, $result->logicalLinesOfCodePercentage());
-    }
-
-    public function testHasFunctions(): void
-    {
-        $result = new Result([], 1, 2, 10, 4, 6, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15);
-
-        $this->assertSame(7, $result->functions());
-    }
-
-    public function testHasLowestCyclomaticComplexityForFunction(): void
-    {
-        $result = new Result([], 1, 2, 10, 4, 6, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15);
-
-        $this->assertSame(8, $result->lowestCyclomaticComplexityForFunction());
-    }
-
-    public function testHasAverageCyclomaticComplexityForFunction(): void
-    {
-        $result = new Result([], 1, 2, 10, 4, 6, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15);
-
-        $this->assertSame(9.0, $result->averageCyclomaticComplexityForFunction());
-    }
-
-    public function testHasHighestCyclomaticComplexityForFunction(): void
-    {
-        $result = new Result([], 1, 2, 10, 4, 6, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15);
-
-        $this->assertSame(10, $result->highestCyclomaticComplexityForFunction());
-    }
-
-    public function testHasClassesOrTraits(): void
-    {
-        $result = new Result([], 1, 2, 10, 4, 6, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15);
-
-        $this->assertSame(11, $result->classesOrTraits());
-    }
-
-    public function testHasMethods(): void
-    {
-        $result = new Result([], 1, 2, 10, 4, 6, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15);
-
-        $this->assertSame(12, $result->methods());
-    }
-
-    public function testHasLowestCyclomaticComplexityForMethod(): void
-    {
-        $result = new Result([], 1, 2, 10, 4, 6, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15);
-
-        $this->assertSame(13, $result->lowestCyclomaticComplexityForMethod());
-    }
-
-    public function testHasAverageCyclomaticComplexityForMethod(): void
-    {
-        $result = new Result([], 1, 2, 10, 4, 6, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15);
-
-        $this->assertSame(14.0, $result->averageCyclomaticComplexityForMethod());
-    }
-
-    public function testHasHighestCyclomaticComplexityForMethod(): void
-    {
-        $result = new Result([], 1, 2, 10, 4, 6, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15);
-
-        $this->assertSame(15, $result->highestCyclomaticComplexityForMethod());
+        return new Result(
+            $errors,
+            1,
+            2,
+            new Size(10, 4, 6, 3, 2, 1, 0, new Statistics(1, 1.0, 1), new Statistics(1, 1.0, 1), new Statistics(1, 1.0, 1), 1.0),
+            new Complexity(0.5, new Statistics(1, 1.0, 1), new Statistics(1, 1.0, 1), new Statistics(1, 1.0, 1)),
+            new Dependencies(1, 0, 0, 0, 0, 0, 0),
+            new Structure(2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0),
+            $tests ?? new Tests(0, 0),
+        );
     }
 }

@@ -14,111 +14,20 @@ namespace Hertel\PhpLoc;
 final readonly class Result
 {
     /**
-     * @var list<non-empty-string>
-     */
-    private array $errors;
-
-    /**
-     * @var non-negative-int
-     */
-    private int $directories;
-
-    /**
-     * @var non-negative-int
-     */
-    private int $files;
-
-    /**
-     * @var non-negative-int
-     */
-    private int $linesOfCode;
-
-    /**
-     * @var non-negative-int
-     */
-    private int $commentLinesOfCode;
-
-    /**
-     * @var non-negative-int
-     */
-    private int $nonCommentLinesOfCode;
-
-    /**
-     * @var non-negative-int
-     */
-    private int $logicalLinesOfCode;
-
-    /**
-     * @var non-negative-int
-     */
-    private int $functions;
-
-    /**
-     * @var non-negative-int
-     */
-    private int $lowestCyclomaticComplexityForFunction;
-    private float $averageCyclomaticComplexityForFunction;
-
-    /**
-     * @var non-negative-int
-     */
-    private int $highestCyclomaticComplexityForFunction;
-
-    /**
-     * @var non-negative-int
-     */
-    private int $classesOrTraits;
-
-    /**
-     * @var non-negative-int
-     */
-    private int $methods;
-
-    /**
-     * @var non-negative-int
-     */
-    private int $lowestCyclomaticComplexityForMethod;
-    private float $averageCyclomaticComplexityForMethod;
-
-    /**
-     * @var non-negative-int
-     */
-    private int $highestCyclomaticComplexityForMethod;
-
-    /**
      * @param list<non-empty-string> $errors
      * @param non-negative-int       $directories
      * @param non-negative-int       $files
-     * @param non-negative-int       $linesOfCode
-     * @param non-negative-int       $commentLinesOfCode
-     * @param non-negative-int       $nonCommentLinesOfCode
-     * @param non-negative-int       $logicalLinesOfCode
-     * @param non-negative-int       $functions
-     * @param non-negative-int       $lowestCyclomaticComplexityForFunction
-     * @param non-negative-int       $highestCyclomaticComplexityForFunction
-     * @param non-negative-int       $classesOrTraits
-     * @param non-negative-int       $methods
-     * @param non-negative-int       $lowestCyclomaticComplexityForMethod
-     * @param non-negative-int       $highestCyclomaticComplexityForMethod
      */
-    public function __construct(array $errors, int $directories, int $files, int $linesOfCode, int $commentLinesOfCode, int $nonCommentLinesOfCode, int $logicalLinesOfCode, int $functions, int $lowestCyclomaticComplexityForFunction, float $averageCyclomaticComplexityForFunction, int $highestCyclomaticComplexityForFunction, int $classesOrTraits, int $methods, int $lowestCyclomaticComplexityForMethod, float $averageCyclomaticComplexityForMethod, int $highestCyclomaticComplexityForMethod)
-    {
-        $this->errors = $errors;
-        $this->directories = $directories;
-        $this->files = $files;
-        $this->linesOfCode = $linesOfCode;
-        $this->commentLinesOfCode = $commentLinesOfCode;
-        $this->nonCommentLinesOfCode = $nonCommentLinesOfCode;
-        $this->logicalLinesOfCode = $logicalLinesOfCode;
-        $this->functions = $functions;
-        $this->lowestCyclomaticComplexityForFunction = $lowestCyclomaticComplexityForFunction;
-        $this->averageCyclomaticComplexityForFunction = $averageCyclomaticComplexityForFunction;
-        $this->highestCyclomaticComplexityForFunction = $highestCyclomaticComplexityForFunction;
-        $this->classesOrTraits = $classesOrTraits;
-        $this->methods = $methods;
-        $this->lowestCyclomaticComplexityForMethod = $lowestCyclomaticComplexityForMethod;
-        $this->averageCyclomaticComplexityForMethod = $averageCyclomaticComplexityForMethod;
-        $this->highestCyclomaticComplexityForMethod = $highestCyclomaticComplexityForMethod;
+    public function __construct(
+        private array $errors,
+        private int $directories,
+        private int $files,
+        private Size $size,
+        private Complexity $complexity,
+        private Dependencies $dependencies,
+        private Structure $structure,
+        private Tests $tests,
+    ) {
     }
 
     /**
@@ -153,128 +62,28 @@ final readonly class Result
         return $this->files;
     }
 
-    /**
-     * @return non-negative-int
-     */
-    public function linesOfCode(): int
+    public function size(): Size
     {
-        return $this->linesOfCode;
+        return $this->size;
     }
 
-    /**
-     * @return non-negative-int
-     */
-    public function commentLinesOfCode(): int
+    public function complexity(): Complexity
     {
-        return $this->commentLinesOfCode;
+        return $this->complexity;
     }
 
-    public function commentLinesOfCodePercentage(): float
+    public function dependencies(): Dependencies
     {
-        if (0 === $this->linesOfCode()) {
-            return 0.0;
-        }
-
-        return ($this->commentLinesOfCode() / $this->linesOfCode()) * 100;
+        return $this->dependencies;
     }
 
-    /**
-     * @return non-negative-int
-     */
-    public function nonCommentLinesOfCode(): int
+    public function structure(): Structure
     {
-        return $this->nonCommentLinesOfCode;
+        return $this->structure;
     }
 
-    public function nonCommentLinesOfCodePercentage(): float
+    public function tests(): Tests
     {
-        if (0 === $this->linesOfCode()) {
-            return 0.0;
-        }
-
-        return ($this->nonCommentLinesOfCode() / $this->linesOfCode()) * 100;
-    }
-
-    /**
-     * @return non-negative-int
-     */
-    public function logicalLinesOfCode(): int
-    {
-        return $this->logicalLinesOfCode;
-    }
-
-    public function logicalLinesOfCodePercentage(): float
-    {
-        if (0 === $this->linesOfCode()) {
-            return 0.0;
-        }
-
-        return ($this->logicalLinesOfCode() / $this->linesOfCode()) * 100;
-    }
-
-    /**
-     * @return non-negative-int
-     */
-    public function functions(): int
-    {
-        return $this->functions;
-    }
-
-    /**
-     * @return non-negative-int
-     */
-    public function lowestCyclomaticComplexityForFunction(): int
-    {
-        return $this->lowestCyclomaticComplexityForFunction;
-    }
-
-    public function averageCyclomaticComplexityForFunction(): float
-    {
-        return $this->averageCyclomaticComplexityForFunction;
-    }
-
-    /**
-     * @return non-negative-int
-     */
-    public function highestCyclomaticComplexityForFunction(): int
-    {
-        return $this->highestCyclomaticComplexityForFunction;
-    }
-
-    /**
-     * @return non-negative-int
-     */
-    public function methods(): int
-    {
-        return $this->methods;
-    }
-
-    /**
-     * @return non-negative-int
-     */
-    public function lowestCyclomaticComplexityForMethod(): int
-    {
-        return $this->lowestCyclomaticComplexityForMethod;
-    }
-
-    public function averageCyclomaticComplexityForMethod(): float
-    {
-        return $this->averageCyclomaticComplexityForMethod;
-    }
-
-    /**
-     * @return non-negative-int
-     */
-    public function highestCyclomaticComplexityForMethod(): int
-    {
-        return $this->highestCyclomaticComplexityForMethod;
-    }
-
-    /**
-     * @return non-negative-int
-     */
-    public function classesOrTraits(): int
-    {
-        return $this->classesOrTraits;
+        return $this->tests;
     }
 }

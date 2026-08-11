@@ -17,7 +17,13 @@ use PHPUnit\Framework\Attributes\UsesClass;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(TextResultFormatter::class)]
+#[UsesClass(Complexity::class)]
+#[UsesClass(Dependencies::class)]
 #[UsesClass(Result::class)]
+#[UsesClass(Size::class)]
+#[UsesClass(Statistics::class)]
+#[UsesClass(Structure::class)]
+#[UsesClass(Tests::class)]
 #[Small]
 final class TextResultFormatterTest extends TestCase
 {
@@ -25,9 +31,7 @@ final class TextResultFormatterTest extends TestCase
     {
         $this->assertStringEqualsFile(
             __DIR__.'/../_expectations/result.txt',
-            (new TextResultFormatter())->format(
-                new Result([], 1, 2, 10, 4, 6, 3, 7, 8, 9, 10, 11, 12, 13, 14, 15),
-            ),
+            (new TextResultFormatter())->format(ResultFixture::result()),
         );
     }
 
@@ -35,49 +39,15 @@ final class TextResultFormatterTest extends TestCase
     {
         $this->assertStringEqualsFile(
             __DIR__.'/../_expectations/result-with-errors.txt',
-            (new TextResultFormatter())->format(
-                new Result(
-                    [
-                        'Cannot parse /path/to/First.php: Syntax error',
-                        'Cannot parse /path/to/Second.php: Syntax error',
-                    ],
-                    1,
-                    2,
-                    10,
-                    4,
-                    6,
-                    3,
-                    7,
-                    8,
-                    9,
-                    10,
-                    11,
-                    12,
-                    13,
-                    14,
-                    15,
-                ),
-            ),
+            (new TextResultFormatter())->format(ResultFixture::resultWithErrors()),
         );
     }
 
-    public function testDoesNotFormatComplexityOfFunctionsWhenThereAreNone(): void
+    public function testFormatsEveryMetricEvenWhenNothingWasFound(): void
     {
         $this->assertStringEqualsFile(
-            __DIR__.'/../_expectations/result-without-functions.txt',
-            (new TextResultFormatter())->format(
-                new Result([], 1, 2, 10, 4, 6, 3, 0, 0, 0.0, 0, 11, 12, 13, 14.0, 15),
-            ),
-        );
-    }
-
-    public function testDoesNotFormatComplexityOfClassesOrFunctionsWhenThereAreNone(): void
-    {
-        $this->assertStringEqualsFile(
-            __DIR__.'/../_expectations/result-without-classes-or-functions.txt',
-            (new TextResultFormatter())->format(
-                new Result([], 1, 2, 10, 4, 6, 3, 0, 0, 0.0, 0, 0, 0, 0, 0.0, 0),
-            ),
+            __DIR__.'/../_expectations/result-empty.txt',
+            (new TextResultFormatter())->format(ResultFixture::emptyResult()),
         );
     }
 }

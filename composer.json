@@ -46,6 +46,11 @@
             "src/"
         ]
     },
+    "autoload-dev": {
+        "classmap": [
+            "tests/_helper/"
+        ]
+    },
     "bin": [
         "phploc"
     ],

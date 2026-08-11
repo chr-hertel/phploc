@@ -1,31 +1,108 @@
 {
-    "directories": 1,
-    "files": 2,
+    "directories": 3,
+    "files": 42,
     "linesOfCode": {
-        "total": 10,
-        "comment": 4,
-        "commentPercentage": 40.0,
-        "nonComment": 6,
-        "nonCommentPercentage": 60.0,
-        "logical": 3,
-        "logicalPercentage": 30.0
+        "total": 1520,
+        "comment": 320,
+        "commentPercentage": 21.052631578947366,
+        "nonComment": 1200,
+        "nonCommentPercentage": 78.94736842105263,
+        "logical": 400,
+        "logicalPercentage": 26.31578947368421,
+        "logicalInClasses": 380,
+        "logicalInClassesPercentage": 95.0,
+        "logicalInFunctions": 15,
+        "logicalInFunctionsPercentage": 3.75,
+        "logicalNotInClassesOrFunctions": 5,
+        "logicalNotInClassesOrFunctionsPercentage": 1.25
     },
-    "classesOrTraits": 11,
-    "methods": {
-        "count": 12,
+    "length": {
+        "class": {
+            "minimum": 4,
+            "average": 38.5,
+            "maximum": 92
+        },
+        "method": {
+            "minimum": 1,
+            "average": 6.25,
+            "maximum": 24
+        },
+        "methodsPerClass": {
+            "minimum": 0,
+            "average": 5.5,
+            "maximum": 19
+        },
+        "averageFunction": 7.5
+    },
+    "averageComplexityPerLogicalLine": 0.35,
+    "classesOrTraits": 37,
+    "classes": {
+        "count": 31,
+        "abstract": 5,
+        "concrete": 26,
+        "final": 20,
+        "nonFinal": 6,
         "cyclomaticComplexity": {
-            "lowest": 13,
-            "average": 14.0,
-            "highest": 15
+            "lowest": 1,
+            "average": 5.2,
+            "highest": 31
         }
+    },
+    "methods": {
+        "count": 64,
+        "cyclomaticComplexity": {
+            "lowest": 1,
+            "average": 2.4,
+            "highest": 12
+        },
+        "nonStatic": 60,
+        "static": 4,
+        "public": 40,
+        "protected": 10,
+        "private": 14
     },
     "functions": {
-        "count": 7,
+        "count": 5,
         "cyclomaticComplexity": {
-            "lowest": 8,
-            "average": 9.0,
-            "highest": 10
+            "lowest": 1,
+            "average": 3.75,
+            "highest": 9
+        },
+        "named": 2,
+        "anonymous": 3
+    },
+    "namespaces": 3,
+    "interfaces": 1,
+    "traits": 2,
+    "enums": 4,
+    "constants": {
+        "count": 10,
+        "global": 1,
+        "class": 9,
+        "publicClass": 7,
+        "nonPublicClass": 2
+    },
+    "dependencies": {
+        "globalAccesses": {
+            "count": 7,
+            "constants": 4,
+            "variables": 2,
+            "superGlobalVariables": 1
+        },
+        "attributeAccesses": {
+            "count": 128,
+            "nonStatic": 120,
+            "static": 8
+        },
+        "methodCalls": {
+            "count": 345,
+            "nonStatic": 300,
+            "static": 45
         }
+    },
+    "tests": {
+        "classes": 12,
+        "methods": 88
     },
     "errors": []
 }

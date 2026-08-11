@@ -1,23 +1,79 @@
-Directories:                                          1
-Files:                                                2
+Directories                                          3
+Files                                               42
 
-Lines of Code (LOC):                                 10
-Comment Lines of Code (CLOC):                         4 (40.00%)
-Non-Comment Lines of Code (NCLOC):                    6 (60.00%)
-Logical Lines of Code (LLOC):                         3 (30.00%)
+Size
+  Lines of Code (LOC)                            1,520
+  Comment Lines of Code (CLOC)                     320 (21.05%)
+  Non-Comment Lines of Code (NCLOC)              1,200 (78.95%)
+  Logical Lines of Code (LLOC)                     400 (26.32%)
+    Classes                                        380 (95.00%)
+      Average Class Length                          39
+        Minimum Class Length                         4
+        Maximum Class Length                        92
+      Average Method Length                          6
+        Minimum Method Length                        1
+        Maximum Method Length                       24
+      Average Methods Per Class                      6
+        Minimum Methods Per Class                    0
+        Maximum Methods Per Class                   19
+    Functions                                       15 (3.75%)
+      Average Function Length                        8
+    Not in classes or functions                      5 (1.25%)
 
-Classes or Traits                                    11
-  Methods                                            12
-    Cyclomatic Complexity
-      Lowest                                      13.00
-      Average                                     14.00
-      Highest                                     15.00
+Cyclomatic Complexity
+  Average Complexity per LLOC                     0.35
+  Average Complexity per Class                    5.20
+    Minimum Class Complexity                      1.00
+    Maximum Class Complexity                     31.00
+  Average Complexity per Method                   2.40
+    Minimum Method Complexity                     1.00
+    Maximum Method Complexity                    12.00
+  Average Complexity per Function                 3.75
+    Minimum Function Complexity                   1.00
+    Maximum Function Complexity                   9.00
 
-Functions                                             7
-  Cyclomatic Complexity
-    Lowest                                         8.00
-    Average                                        9.00
-    Highest                                       10.00
+Dependencies
+  Global Accesses                                    7
+    Global Constants                                 4 (57.14%)
+    Global Variables                                 2 (28.57%)
+    Super-Global Variables                           1 (14.29%)
+  Attribute Accesses                               128
+    Non-Static                                     120 (93.75%)
+    Static                                           8 (6.25%)
+  Method Calls                                     345
+    Non-Static                                     300 (86.96%)
+    Static                                          45 (13.04%)
+
+Structure
+  Namespaces                                         3
+  Interfaces                                         1
+  Traits                                             2
+  Enums                                              4
+  Classes                                           31
+    Abstract Classes                                 5 (16.13%)
+    Concrete Classes                                26 (83.87%)
+      Final Classes                                 20 (76.92%)
+      Non-Final Classes                              6 (23.08%)
+  Methods                                           64
+    Scope
+      Non-Static Methods                            60 (93.75%)
+      Static Methods                                 4 (6.25%)
+    Visibility
+      Public Methods                                40 (62.50%)
+      Protected Methods                             10 (15.62%)
+      Private Methods                               14 (21.88%)
+  Functions                                          5
+    Named Functions                                  2 (40.00%)
+    Anonymous Functions                              3 (60.00%)
+  Constants                                         10
+    Global Constants                                 1 (10.00%)
+    Class Constants                                  9 (90.00%)
+      Public Constants                               7 (77.78%)
+      Non-Public Constants                           2 (22.22%)
+
+Tests
+  Classes                                           12
+  Methods                                           88
 
 Errors:
   Cannot parse /path/to/First.php: Syntax error

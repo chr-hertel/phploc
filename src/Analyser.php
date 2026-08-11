@@ -14,13 +14,9 @@ namespace Hertel\PhpLoc;
 use PhpParser\Error;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;
-use PhpParser\NodeVisitor\ParentConnectingVisitor;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
-use SebastianBergmann\Complexity\ComplexityCalculatingVisitor;
-use SebastianBergmann\Complexity\ComplexityCollection;
 use SebastianBergmann\LinesOfCode\LineCountingVisitor;
-use SebastianBergmann\LinesOfCode\LinesOfCode;
 
 final class Analyser
 {
@@ -29,22 +25,17 @@ final class Analyser
      */
     public function analyse(array $files): Result
     {
+        $collector = new Collector();
+        $tests = $this->detectTests($files);
+
         $errors = [];
         $directories = [];
-        $complexity = ComplexityCollection::fromList();
-        $linesOfCode = null;
 
         foreach ($files as $file) {
             $directories[] = \dirname($file);
 
             try {
-                $result = $this->analyseFile($file);
-
-                $complexity = $complexity->mergeWith($result['complexity']);
-
-                if (null !== $result['linesOfCode']) {
-                    $linesOfCode = null === $linesOfCode ? $result['linesOfCode'] : $linesOfCode->plus($result['linesOfCode']);
-                }
+                $this->analyseFile($file, $collector, $tests);
             } catch (ParserException $e) {
                 $message = $e->getMessage();
 
@@ -54,64 +45,71 @@ final class Analyser
             }
         }
 
-        $classesOrTraits = [];
+        return $collector->result(
+            $errors,
+            \count(array_unique($directories)),
+            \count($files),
+        );
+    }
 
-        foreach ($complexity->isMethod() as $item) {
-            $classesOrTraits[] = \explode('::', $item->name())[0];
+    /**
+     * Files that cannot be read or parsed are ignored here; the measuring pass
+     * reports them as errors.
+     *
+     * @param list<non-empty-string> $files
+     */
+    private function detectTests(array $files): TestClassRegistry
+    {
+        $registry = new TestClassRegistry();
+        $parser = $this->parser();
+
+        foreach ($files as $file) {
+            $source = file_get_contents($file);
+
+            if (false === $source || '' === $source || !TestClassRegistry::couldDeclareTests($source)) {
+                continue;
+            }
+
+            try {
+                $nodes = $parser->parse($source);
+            } catch (Error) {
+                continue;
+            }
+
+            if (null === $nodes) {
+                continue;
+            }
+
+            $traverser = new NodeTraverser();
+
+            $traverser->addVisitor(new NameResolver());
+            $traverser->addVisitor(new TestDetectionVisitor($registry, $file));
+
+            $traverser->traverse($nodes);
         }
 
-        $classesOrTraits = \count(\array_unique($classesOrTraits));
-        $complexityFunctions = $complexity->isFunction();
-        $numberOfFunctions = $complexityFunctions->count();
-        $complexityFunctions = $this->cyclomaticComplexityStatistics($complexityFunctions);
-        $complexityMethods = $complexity->isMethod();
-        $numberOfMethods = $complexityMethods->count();
-        $complexityMethods = $this->cyclomaticComplexityStatistics($complexityMethods);
-
-        return new Result(
-            $errors,
-            \count(\array_unique($directories)),
-            \count($files),
-            $linesOfCode?->linesOfCode() ?? 0,
-            $linesOfCode?->commentLinesOfCode() ?? 0,
-            $linesOfCode?->nonCommentLinesOfCode() ?? 0,
-            $linesOfCode?->logicalLinesOfCode() ?? 0,
-            $numberOfFunctions,
-            $complexityFunctions['minimum'],
-            $complexityFunctions['average'],
-            $complexityFunctions['maximum'],
-            $classesOrTraits,
-            $numberOfMethods,
-            $complexityMethods['minimum'],
-            $complexityMethods['average'],
-            $complexityMethods['maximum'],
-        );
+        return $registry;
     }
 
     /**
      * @param non-empty-string $file
      *
-     * @return array{complexity: ComplexityCollection, linesOfCode: ?LinesOfCode}
-     *
      * @throws ParserException
      */
-    private function analyseFile(string $file): array
+    private function analyseFile(string $file, Collector $collector, TestClassRegistry $tests): void
     {
-        $source = \file_get_contents($file);
+        $source = file_get_contents($file);
 
         if (false === $source) {
             throw new ParserException(\sprintf('Cannot read %s', $file));
         }
 
         if ('' === $source) {
-            return [
-                'complexity' => ComplexityCollection::fromList(),
-                'linesOfCode' => null,
-            ];
+            return;
         }
 
         $parser = $this->parser();
-        $lines = \substr_count($source, "\n");
+        $lines = substr_count($source, "\n");
 
         if (0 === $lines) {
             $lines = 1;
@@ -124,45 +122,30 @@ final class Analyser
 
             $traverser = new NodeTraverser();
 
-            $complexityCalculatingVisitor = new ComplexityCalculatingVisitor(false);
             $lineCountingVisitor = new LineCountingVisitor($lines);
 
             $traverser->addVisitor(new NameResolver());
-            $traverser->addVisitor(new ParentConnectingVisitor());
-            $traverser->addVisitor($complexityCalculatingVisitor);
             $traverser->addVisitor($lineCountingVisitor);
+            $traverser->addVisitor(
+                new MetricsVisitor($collector, $tests, $tests->isPestFile($file)),
+            );
 
             $traverser->traverse($nodes);
         } catch (Error $error) {
             throw new ParserException(\sprintf('Cannot parse %s: %s', $file, $error->getMessage()), $error->getCode(), $error);
         }
 
-        return [
-            'complexity' => $complexityCalculatingVisitor->result(),
-            'linesOfCode' => $lineCountingVisitor->result(),
-        ];
+        $linesOfCode = $lineCountingVisitor->result();
+
+        $collector->addLines(
+            $linesOfCode->linesOfCode(),
+            $linesOfCode->commentLinesOfCode(),
+            $linesOfCode->nonCommentLinesOfCode(),
+        );
     }
 
     private function parser(): Parser
     {
         return (new ParserFactory())->createForNewestSupportedVersion();
-    }
-
-    /**
-     * @return array{minimum: non-negative-int, maximum: non-negative-int, average: float}
-     */
-    private function cyclomaticComplexityStatistics(ComplexityCollection $items): array
-    {
-        $values = [];
-
-        foreach ($items as $item) {
-            $values[] = $item->cyclomaticComplexity();
-        }
-
-        return [
-            'minimum' => !empty($values) ? \min($values) : 0,
-            'maximum' => !empty($values) ? \max($values) : 0,
-            'average' => !empty($values) ? \array_sum($values) / \count($values) : 0,
-        ];
     }
 }

@@ -1,15 +1,5 @@
---TEST--
-phploc ../_fixture-invalid
---FILE--
-<?php declare(strict_types=1);
-require __DIR__ . '/_phploc.php';
-
-phploc(__DIR__ . '/../_fixture-invalid');
---EXPECTF--
-phploc %s by Sebastian Bergmann.
-
-Directories                                          1
-Files                                                1
+Directories                                          0
+Files                                                0
 
 Size
   Lines of Code (LOC)                                0
@@ -84,6 +74,3 @@ Structure
 Tests
   Classes                                            0
   Methods                                            0
-
-Errors:
-  Cannot parse %s/InvalidClass.php: Syntax error%s

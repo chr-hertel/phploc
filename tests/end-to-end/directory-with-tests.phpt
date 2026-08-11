@@ -1,43 +1,43 @@
 --TEST--
-phploc ../_fixture-invalid
+phploc ../_fixture-tests
 --FILE--
 <?php declare(strict_types=1);
 require __DIR__ . '/_phploc.php';
 
-phploc(__DIR__ . '/../_fixture-invalid');
+phploc(__DIR__ . '/../_fixture-tests');
 --EXPECTF--
 phploc %s by Sebastian Bergmann.
 
 Directories                                          1
-Files                                                1
+Files                                                7
 
 Size
-  Lines of Code (LOC)                                0
-  Comment Lines of Code (CLOC)                       0 (0.00%)
-  Non-Comment Lines of Code (NCLOC)                  0 (0.00%)
-  Logical Lines of Code (LLOC)                       0 (0.00%)
-    Classes                                          0 (0.00%)
-      Average Class Length                           0
-        Minimum Class Length                         0
-        Maximum Class Length                         0
-      Average Method Length                          0
-        Minimum Method Length                        0
-        Maximum Method Length                        0
-      Average Methods Per Class                      0
-        Minimum Methods Per Class                    0
-        Maximum Methods Per Class                    0
+  Lines of Code (LOC)                              160
+  Comment Lines of Code (CLOC)                      62 (38.75%)
+  Non-Comment Lines of Code (NCLOC)                 98 (61.25%)
+  Logical Lines of Code (LLOC)                       1 (0.62%)
+    Classes                                          1 (100.00%)
+      Average Class Length                           1
+        Minimum Class Length                         1
+        Maximum Class Length                         1
+      Average Method Length                          1
+        Minimum Method Length                        1
+        Maximum Method Length                        1
+      Average Methods Per Class                      1
+        Minimum Methods Per Class                    1
+        Maximum Methods Per Class                    1
     Functions                                        0 (0.00%)
       Average Function Length                        0
     Not in classes or functions                      0 (0.00%)
 
 Cyclomatic Complexity
   Average Complexity per LLOC                     0.00
-  Average Complexity per Class                    0.00
-    Minimum Class Complexity                      0.00
-    Maximum Class Complexity                      0.00
-  Average Complexity per Method                   0.00
-    Minimum Method Complexity                     0.00
-    Maximum Method Complexity                     0.00
+  Average Complexity per Class                    1.00
+    Minimum Class Complexity                      1.00
+    Maximum Class Complexity                      1.00
+  Average Complexity per Method                   1.00
+    Minimum Method Complexity                     1.00
+    Maximum Method Complexity                     1.00
   Average Complexity per Function                 0.00
     Minimum Function Complexity                   0.00
     Maximum Function Complexity                   0.00
@@ -55,21 +55,21 @@ Dependencies
     Static                                           0 (0.00%)
 
 Structure
-  Namespaces                                         0
+  Namespaces                                         1
   Interfaces                                         0
   Traits                                             0
   Enums                                              0
-  Classes                                            0
+  Classes                                            1
     Abstract Classes                                 0 (0.00%)
-    Concrete Classes                                 0 (0.00%)
-      Final Classes                                  0 (0.00%)
+    Concrete Classes                                 1 (100.00%)
+      Final Classes                                  1 (100.00%)
       Non-Final Classes                              0 (0.00%)
-  Methods                                            0
+  Methods                                            1
     Scope
-      Non-Static Methods                             0 (0.00%)
+      Non-Static Methods                             1 (100.00%)
       Static Methods                                 0 (0.00%)
     Visibility
-      Public Methods                                 0 (0.00%)
+      Public Methods                                 1 (100.00%)
       Protected Methods                              0 (0.00%)
       Private Methods                                0 (0.00%)
   Functions                                          0
@@ -82,8 +82,5 @@ Structure
       Non-Public Constants                           0 (0.00%)
 
 Tests
-  Classes                                            0
-  Methods                                            0
-
-Errors:
-  Cannot parse %s/InvalidClass.php: Syntax error%s
+  Classes                                            6
+  Methods                                            7

@@ -44,24 +44,90 @@ $ ./vendor/bin/phploc --json src
 $ ./vendor/bin/phploc src
 phploc 8.0-dev by Sebastian Bergmann.
 
-Directories:                                        104
-Files:                                              856
+Directories                                          2
+Files                                               18
 
-Lines of Code (LOC):                             67,955
-Comment Lines of Code (CLOC):                    19,533 (28.74%)
-Non-Comment Lines of Code (NCLOC):               48,422 (71.26%)
-Logical Lines of Code (LLOC):                    18,478 (27.19%)
+Size
+  Lines of Code (LOC)                            2,800
+  Comment Lines of Code (CLOC)                     719 (25.68%)
+  Non-Comment Lines of Code (NCLOC)              2,081 (74.32%)
+  Logical Lines of Code (LLOC)                     873 (31.18%)
+    Classes                                        873 (100.00%)
+      Average Class Length                          51
+        Minimum Class Length                         0
+        Maximum Class Length                       189
+      Average Method Length                          5
+        Minimum Method Length                        1
+        Maximum Method Length                       81
+      Average Methods Per Class                     10
+        Minimum Methods Per Class                    0
+        Maximum Methods Per Class                   41
+    Functions                                        0 (0.00%)
+      Average Function Length                        0
+    Not in classes or functions                      0 (0.00%)
 
-Classes or Traits                                   662
-  Methods                                         3,389
-    Cyclomatic Complexity
-      Lowest                                       1.00
-      Average                                      2.00
-      Highest                                    156.00
+Cyclomatic Complexity
+  Average Complexity per LLOC                     0.15
+  Average Complexity per Class                    8.65
+    Minimum Class Complexity                      1.00
+    Maximum Class Complexity                     66.00
+  Average Complexity per Method                   1.74
+    Minimum Method Complexity                     1.00
+    Maximum Method Complexity                    19.00
+  Average Complexity per Function                 0.00
+    Minimum Function Complexity                   0.00
+    Maximum Function Complexity                   0.00
 
-Functions                                           185
-  Cyclomatic Complexity
-    Lowest                                         1.00
-    Average                                        1.00
-    Highest                                        1.00
+Dependencies
+  Global Accesses                                    0
+    Global Constants                                 0 (0.00%)
+    Global Variables                                 0 (0.00%)
+    Super-Global Variables                           0 (0.00%)
+  Attribute Accesses                               308
+    Non-Static                                     308 (100.00%)
+    Static                                           0 (0.00%)
+  Method Calls                                     431
+    Non-Static                                     418 (96.98%)
+    Static                                          13 (3.02%)
+
+Structure
+  Namespaces                                         1
+  Interfaces                                         1
+  Traits                                             0
+  Enums                                              1
+  Classes                                           16
+    Abstract Classes                                 0 (0.00%)
+    Concrete Classes                                16 (100.00%)
+      Final Classes                                 16 (100.00%)
+      Non-Final Classes                              0 (0.00%)
+  Methods                                          176
+    Scope
+      Non-Static Methods                           170 (96.59%)
+      Static Methods                                 6 (3.41%)
+    Visibility
+      Public Methods                               144 (81.82%)
+      Protected Methods                              0 (0.00%)
+      Private Methods                               32 (18.18%)
+  Functions                                          0
+    Named Functions                                  0 (0.00%)
+    Anonymous Functions                              0 (0.00%)
+  Constants                                          2
+    Global Constants                                 0 (0.00%)
+    Class Constants                                  2 (100.00%)
+      Public Constants                               0 (0.00%)
+      Non-Public Constants                           2 (100.00%)
+
+Tests
+  Classes                                            0
+  Methods                                            0
 ```
+
+Test classes and test methods are always reported in the `Tests` section of their own instead of being measured as
+production code, so pointing `phploc` at a whole project keeps the numbers about the production code:
+
+```bash
+$ ./vendor/bin/phploc src tests
+```
+
+Test classes of PHPUnit, Codeception, and PhpSpec are recognised, as are Pest files, in which every file that declares
+tests counts as one test class and every `test()` / `it()` call as one test method.
