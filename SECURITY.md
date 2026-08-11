@@ -4,7 +4,9 @@ If you believe you have found a security vulnerability in PHPLOC, please report 
 
 **Please do not report security vulnerabilities through public GitHub issues, discussions, or pull requests.**
 
-Instead, please email `sebastian@phpunit.de`.
+Instead, please email `mail@christopher-hertel.de`.
+
+**Please do not report vulnerabilities in this fork to Sebastian Bergmann or to the original `phploc/phploc` project.**
 
 Please include as much of the information listed below as you can to help us better understand and resolve the issue:
 

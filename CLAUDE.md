@@ -4,7 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project status
 
-PHPLOC is **no longer maintained**; the repository is kept for archival purposes (see `README.md`). Prefer minimal, behavior-preserving changes unless the user explicitly asks otherwise.
+This repository is `hertel/phploc`, a **maintained fork** of Sebastian Bergmann's archived `phploc/phploc` (see `README.md`). It is maintained because [OSS Complexity Report](https://christopher-hertel.de/oss-complexity-report/) depends on it.
+
+Attribution is deliberate and must be preserved: the BSD-3-Clause `LICENSE` keeps Sebastian Bergmann's original copyright notice alongside the fork's, the per-file license headers in `src/` are his and stay unchanged, and `README.md` credits the original project. Clause 3 of the license also means his name must not be used to endorse or promote this fork — describing where the code came from is fine, implying he backs it is not.
 
 ## Tooling
 
