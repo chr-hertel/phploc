@@ -7,7 +7,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-namespace SebastianBergmann\PHPLOC;
+namespace Hertel\PhpLoc;
 
 use const PHP_EOL;
 use function number_format;

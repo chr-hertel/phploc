@@ -13,6 +13,7 @@ Everything up to and including [7.0.2](https://github.com/sebastianbergmann/phpl
 ### Changed
 
 * Maintenance continues in the `hertel/phploc` fork of Sebastian Bergmann's `phploc/phploc`, under the original BSD-3-Clause license
+* The namespace of this tool's classes was changed from `SebastianBergmann\PHPLOC` to `Hertel\PhpLoc` so that this package can be installed alongside `phploc/phploc` without duplicate class definitions
 * The CLI is now built on `symfony/console`; `-v` is Symfony Console's verbosity option, the version is printed by `-V`/`--version`, and `--help` renders Symfony Console's help screen
 * This tool is now installed using Composer instead of being distributed as a PHP Archive (PHAR)
 

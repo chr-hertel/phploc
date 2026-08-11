@@ -8,9 +8,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+use Hertel\PhpLoc\Analyser;
+use Hertel\PhpLoc\TextResultFormatter;
 use SebastianBergmann\FileIterator\Facade;
-use SebastianBergmann\PHPLOC\Analyser;
-use SebastianBergmann\PHPLOC\TextResultFormatter;
 use SebastianBergmann\Version;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
