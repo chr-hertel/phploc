@@ -44,14 +44,14 @@ $ ./vendor/bin/phploc --json src
 $ ./vendor/bin/phploc src
 phploc 8.0-dev by Sebastian Bergmann.
 
-Directories                                          2
+Directories                                          5
 Files                                               18
 
 Size
-  Lines of Code (LOC)                            2,800
-  Comment Lines of Code (CLOC)                     719 (25.68%)
-  Non-Comment Lines of Code (NCLOC)              2,081 (74.32%)
-  Logical Lines of Code (LLOC)                     873 (31.18%)
+  Lines of Code (LOC)                            2,829
+  Comment Lines of Code (CLOC)                     719 (25.42%)
+  Non-Comment Lines of Code (NCLOC)              2,110 (74.58%)
+  Logical Lines of Code (LLOC)                     873 (30.86%)
     Classes                                        873 (100.00%)
       Average Class Length                          51
         Minimum Class Length                         0
@@ -91,7 +91,7 @@ Dependencies
     Static                                          13 (3.02%)
 
 Structure
-  Namespaces                                         1
+  Namespaces                                         5
   Interfaces                                         1
   Traits                                             0
   Enums                                              1

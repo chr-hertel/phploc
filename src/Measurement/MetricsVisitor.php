@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Hertel\PhpLoc;
+namespace Hertel\PhpLoc\Measurement;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;

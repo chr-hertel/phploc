@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Hertel\PhpLoc;
+namespace Hertel\PhpLoc\Exception;
 
 final class ParserException extends \RuntimeException implements Exception
 {

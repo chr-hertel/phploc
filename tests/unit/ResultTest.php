@@ -11,6 +11,12 @@
 
 namespace Hertel\PhpLoc;
 
+use Hertel\PhpLoc\Metric\Complexity;
+use Hertel\PhpLoc\Metric\Dependencies;
+use Hertel\PhpLoc\Metric\Size;
+use Hertel\PhpLoc\Metric\Statistics;
+use Hertel\PhpLoc\Metric\Structure;
+use Hertel\PhpLoc\Metric\Tests;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\UsesClass;

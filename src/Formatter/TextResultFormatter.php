@@ -9,7 +9,14 @@
  * file that was distributed with this source code.
  */
 
-namespace Hertel\PhpLoc;
+namespace Hertel\PhpLoc\Formatter;
+
+use Hertel\PhpLoc\Metric\Complexity;
+use Hertel\PhpLoc\Metric\Dependencies;
+use Hertel\PhpLoc\Metric\Size;
+use Hertel\PhpLoc\Metric\Structure;
+use Hertel\PhpLoc\Metric\Tests;
+use Hertel\PhpLoc\Result;
 
 final readonly class TextResultFormatter
 {

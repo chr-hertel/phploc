@@ -10,8 +10,8 @@
  * file that was distributed with this source code.
  */
 use Hertel\PhpLoc\Analyser;
-use Hertel\PhpLoc\JsonResultFormatter;
-use Hertel\PhpLoc\TextResultFormatter;
+use Hertel\PhpLoc\Formatter\JsonResultFormatter;
+use Hertel\PhpLoc\Formatter\TextResultFormatter;
 use SebastianBergmann\FileIterator\Facade;
 use SebastianBergmann\Version;
 use Symfony\Component\Console\Command\Command;

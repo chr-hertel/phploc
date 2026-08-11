@@ -9,8 +9,16 @@
  * file that was distributed with this source code.
  */
 
-namespace Hertel\PhpLoc;
+namespace Hertel\PhpLoc\Formatter;
 
+use Hertel\PhpLoc\Metric\Complexity;
+use Hertel\PhpLoc\Metric\Dependencies;
+use Hertel\PhpLoc\Metric\Size;
+use Hertel\PhpLoc\Metric\Statistics;
+use Hertel\PhpLoc\Metric\Structure;
+use Hertel\PhpLoc\Metric\Tests;
+use Hertel\PhpLoc\Result;
+use Hertel\PhpLoc\ResultFixture;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Small;
 use PHPUnit\Framework\Attributes\UsesClass;
@@ -30,7 +38,7 @@ final class TextResultFormatterTest extends TestCase
     public function testFormatsResultAsText(): void
     {
         $this->assertStringEqualsFile(
-            __DIR__.'/../_expectations/result.txt',
+            __DIR__.'/../../_expectations/result.txt',
             (new TextResultFormatter())->format(ResultFixture::result()),
         );
     }
@@ -38,7 +46,7 @@ final class TextResultFormatterTest extends TestCase
     public function testFormatsErrors(): void
     {
         $this->assertStringEqualsFile(
-            __DIR__.'/../_expectations/result-with-errors.txt',
+            __DIR__.'/../../_expectations/result-with-errors.txt',
             (new TextResultFormatter())->format(ResultFixture::resultWithErrors()),
         );
     }
@@ -46,7 +54,7 @@ final class TextResultFormatterTest extends TestCase
     public function testFormatsEveryMetricEvenWhenNothingWasFound(): void
     {
         $this->assertStringEqualsFile(
-            __DIR__.'/../_expectations/result-empty.txt',
+            __DIR__.'/../../_expectations/result-empty.txt',
             (new TextResultFormatter())->format(ResultFixture::emptyResult()),
         );
     }

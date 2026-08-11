@@ -11,6 +11,13 @@
 
 namespace Hertel\PhpLoc;
 
+use Hertel\PhpLoc\Metric\Complexity;
+use Hertel\PhpLoc\Metric\Dependencies;
+use Hertel\PhpLoc\Metric\Size;
+use Hertel\PhpLoc\Metric\Statistics;
+use Hertel\PhpLoc\Metric\Structure;
+use Hertel\PhpLoc\Metric\Tests;
+
 /**
  * The results that the formatter tests are run against.
  *

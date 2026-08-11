@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Hertel\PhpLoc;
+namespace Hertel\PhpLoc\Measurement;
 
 /**
  * A class-like or method the MetricsVisitor is currently inside of.

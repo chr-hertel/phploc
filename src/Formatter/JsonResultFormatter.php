@@ -9,7 +9,10 @@
  * file that was distributed with this source code.
  */
 
-namespace Hertel\PhpLoc;
+namespace Hertel\PhpLoc\Formatter;
+
+use Hertel\PhpLoc\Metric\Statistics;
+use Hertel\PhpLoc\Result;
 
 final readonly class JsonResultFormatter
 {

@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Hertel\PhpLoc;
+namespace Hertel\PhpLoc\Metric;
 
 /**
  * Minimum, average, and maximum of a set of measurements.

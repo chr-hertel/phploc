@@ -11,6 +11,11 @@
 
 namespace Hertel\PhpLoc;
 
+use Hertel\PhpLoc\Exception\ParserException;
+use Hertel\PhpLoc\Measurement\Collector;
+use Hertel\PhpLoc\Measurement\MetricsVisitor;
+use Hertel\PhpLoc\Measurement\TestClassRegistry;
+use Hertel\PhpLoc\Measurement\TestDetectionVisitor;
 use PhpParser\Error;
 use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor\NameResolver;

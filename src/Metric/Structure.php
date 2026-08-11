@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace Hertel\PhpLoc;
+namespace Hertel\PhpLoc\Metric;
 
 /**
  * The "Structure" section of the report.
